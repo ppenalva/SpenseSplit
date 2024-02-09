@@ -9,20 +9,48 @@
 /* Begin PBXBuildFile section */
 		6E6BBE332B767C88006CE2CA /* SpenseSplitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE322B767C88006CE2CA /* SpenseSplitApp.swift */; };
 		6E6BBE352B767C88006CE2CA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE342B767C88006CE2CA /* ContentView.swift */; };
-		6E6BBE372B767C88006CE2CA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE362B767C88006CE2CA /* Item.swift */; };
 		6E6BBE392B767C8A006CE2CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6BBE382B767C8A006CE2CA /* Assets.xcassets */; };
 		6E6BBE3C2B767C8A006CE2CA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E6BBE3B2B767C8A006CE2CA /* Preview Assets.xcassets */; };
+		6E6BBE452B767EEE006CE2CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE442B767EEE006CE2CA /* AppDelegate.swift */; };
+		6E6BBE472B767F31006CE2CA /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE462B767F31006CE2CA /* CoreDataStack.swift */; };
+		6E6BBE492B7680A3006CE2CA /* ShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE482B7680A3006CE2CA /* ShareController.swift */; };
+		6E6BBE4C2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE4A2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld */; };
+		6E6BBE502B768CD8006CE2CA /* Party+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE4F2B768CD8006CE2CA /* Party+CoreDataClass.swift */; };
+		6E6BBE522B768CF2006CE2CA /* Party+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE512B768CF2006CE2CA /* Party+CoreDataProperties.swift */; };
+		6E6BBE542B768D16006CE2CA /* Participant+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE532B768D16006CE2CA /* Participant+CoreDataClass.swift */; };
+		6E6BBE562B768D2B006CE2CA /* Participant+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE552B768D2B006CE2CA /* Participant+CoreDataProperties.swift */; };
+		6E6BBE582B768D41006CE2CA /* Expense+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE572B768D41006CE2CA /* Expense+CoreDataClass.swift */; };
+		6E6BBE5A2B768D54006CE2CA /* Expense+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE592B768D54006CE2CA /* Expense+CoreDataProperties.swift */; };
+		6E6BBE5C2B768D6B006CE2CA /* Payer+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE5B2B768D6B006CE2CA /* Payer+CoreDataClass.swift */; };
+		6E6BBE5E2B768D7E006CE2CA /* Payer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE5D2B768D7E006CE2CA /* Payer+CoreDataProperties.swift */; };
+		6E6BBE602B768D91006CE2CA /* Enjoyer+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE5F2B768D91006CE2CA /* Enjoyer+CoreDataClass.swift */; };
+		6E6BBE622B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE612B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift */; };
+		6E6BBE652B769817006CE2CA /* PartiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE642B769817006CE2CA /* PartiesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6E6BBE2F2B767C88006CE2CA /* SpenseSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpenseSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E6BBE322B767C88006CE2CA /* SpenseSplitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpenseSplitApp.swift; sourceTree = "<group>"; };
 		6E6BBE342B767C88006CE2CA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		6E6BBE362B767C88006CE2CA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		6E6BBE382B767C8A006CE2CA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E6BBE3B2B767C8A006CE2CA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6E6BBE3D2B767C8A006CE2CA /* SpenseSplit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpenseSplit.entitlements; sourceTree = "<group>"; };
 		6E6BBE3E2B767C8A006CE2CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E6BBE442B767EEE006CE2CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6E6BBE462B767F31006CE2CA /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		6E6BBE482B7680A3006CE2CA /* ShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareController.swift; sourceTree = "<group>"; };
+		6E6BBE4B2B7682AB006CE2CA /* SpenseSplit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SpenseSplit.xcdatamodel; sourceTree = "<group>"; };
+		6E6BBE4F2B768CD8006CE2CA /* Party+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Party+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E6BBE512B768CF2006CE2CA /* Party+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Party+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E6BBE532B768D16006CE2CA /* Participant+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E6BBE552B768D2B006CE2CA /* Participant+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E6BBE572B768D41006CE2CA /* Expense+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E6BBE592B768D54006CE2CA /* Expense+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E6BBE5B2B768D6B006CE2CA /* Payer+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Payer+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E6BBE5D2B768D7E006CE2CA /* Payer+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Payer+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E6BBE5F2B768D91006CE2CA /* Enjoyer+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enjoyer+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E6BBE612B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enjoyer+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E6BBE642B769817006CE2CA /* PartiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartiesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,9 +83,9 @@
 		6E6BBE312B767C88006CE2CA /* SpenseSplit */ = {
 			isa = PBXGroup;
 			children = (
-				6E6BBE322B767C88006CE2CA /* SpenseSplitApp.swift */,
-				6E6BBE342B767C88006CE2CA /* ContentView.swift */,
-				6E6BBE362B767C88006CE2CA /* Item.swift */,
+				6E6BBE4D2B7682C1006CE2CA /* Basics */,
+				6E6BBE632B7697EA006CE2CA /* Party */,
+				6E6BBE4E2B768308006CE2CA /* CoreData */,
 				6E6BBE382B767C8A006CE2CA /* Assets.xcassets */,
 				6E6BBE3D2B767C8A006CE2CA /* SpenseSplit.entitlements */,
 				6E6BBE3E2B767C8A006CE2CA /* Info.plist */,
@@ -72,6 +100,44 @@
 				6E6BBE3B2B767C8A006CE2CA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		6E6BBE4D2B7682C1006CE2CA /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				6E6BBE322B767C88006CE2CA /* SpenseSplitApp.swift */,
+				6E6BBE442B767EEE006CE2CA /* AppDelegate.swift */,
+				6E6BBE462B767F31006CE2CA /* CoreDataStack.swift */,
+				6E6BBE482B7680A3006CE2CA /* ShareController.swift */,
+				6E6BBE342B767C88006CE2CA /* ContentView.swift */,
+			);
+			path = Basics;
+			sourceTree = "<group>";
+		};
+		6E6BBE4E2B768308006CE2CA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				6E6BBE4A2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld */,
+				6E6BBE4F2B768CD8006CE2CA /* Party+CoreDataClass.swift */,
+				6E6BBE512B768CF2006CE2CA /* Party+CoreDataProperties.swift */,
+				6E6BBE532B768D16006CE2CA /* Participant+CoreDataClass.swift */,
+				6E6BBE552B768D2B006CE2CA /* Participant+CoreDataProperties.swift */,
+				6E6BBE572B768D41006CE2CA /* Expense+CoreDataClass.swift */,
+				6E6BBE592B768D54006CE2CA /* Expense+CoreDataProperties.swift */,
+				6E6BBE5B2B768D6B006CE2CA /* Payer+CoreDataClass.swift */,
+				6E6BBE5D2B768D7E006CE2CA /* Payer+CoreDataProperties.swift */,
+				6E6BBE5F2B768D91006CE2CA /* Enjoyer+CoreDataClass.swift */,
+				6E6BBE612B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		6E6BBE632B7697EA006CE2CA /* Party */ = {
+			isa = PBXGroup;
+			children = (
+				6E6BBE642B769817006CE2CA /* PartiesView.swift */,
+			);
+			path = Party;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,9 +210,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E6BBE4C2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld in Sources */,
+				6E6BBE472B767F31006CE2CA /* CoreDataStack.swift in Sources */,
+				6E6BBE582B768D41006CE2CA /* Expense+CoreDataClass.swift in Sources */,
+				6E6BBE652B769817006CE2CA /* PartiesView.swift in Sources */,
+				6E6BBE452B767EEE006CE2CA /* AppDelegate.swift in Sources */,
+				6E6BBE622B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift in Sources */,
 				6E6BBE352B767C88006CE2CA /* ContentView.swift in Sources */,
-				6E6BBE372B767C88006CE2CA /* Item.swift in Sources */,
+				6E6BBE522B768CF2006CE2CA /* Party+CoreDataProperties.swift in Sources */,
+				6E6BBE562B768D2B006CE2CA /* Participant+CoreDataProperties.swift in Sources */,
+				6E6BBE602B768D91006CE2CA /* Enjoyer+CoreDataClass.swift in Sources */,
+				6E6BBE542B768D16006CE2CA /* Participant+CoreDataClass.swift in Sources */,
+				6E6BBE5A2B768D54006CE2CA /* Expense+CoreDataProperties.swift in Sources */,
+				6E6BBE492B7680A3006CE2CA /* ShareController.swift in Sources */,
+				6E6BBE5C2B768D6B006CE2CA /* Payer+CoreDataClass.swift in Sources */,
+				6E6BBE5E2B768D7E006CE2CA /* Payer+CoreDataProperties.swift in Sources */,
 				6E6BBE332B767C88006CE2CA /* SpenseSplitApp.swift in Sources */,
+				6E6BBE502B768CD8006CE2CA /* Party+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +436,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		6E6BBE4A2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6E6BBE4B2B7682AB006CE2CA /* SpenseSplit.xcdatamodel */,
+			);
+			currentVersion = 6E6BBE4B2B7682AB006CE2CA /* SpenseSplit.xcdatamodel */;
+			path = SpenseSplit.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6E6BBE272B767C88006CE2CA /* Project object */;
 }

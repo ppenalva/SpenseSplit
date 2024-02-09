@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(Enjoyer)
+public class Enjoyer: NSManagedObject {
+
+}

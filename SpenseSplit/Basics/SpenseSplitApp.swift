@@ -15,7 +15,7 @@ struct SpenseSplitApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PartiesView()
                 .environment(\.managedObjectContext, container.viewContext)
         }
     }

@@ -6,3 +6,27 @@
 //
 
 import Foundation
+import CoreData
+
+
+extension Participant {
+
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Participant> {
+        return NSFetchRequest<Participant>(entityName: "Participant")
+    }
+
+    @NSManaged public var name: String?
+    @NSManaged public var oldStilePartner: Participant?
+    @NSManaged public var toParty: Party?
+    
+    public var wrappedName: String {
+        get {name ?? ""}
+        set {self.name = String(newValue)
+            objectWillChange.send()
+        }
+    }
+}
+
+extension Participant : Identifiable {
+
+}

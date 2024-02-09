@@ -1,2 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier=""/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Enjoyer" representedClassName="Enjoyer" syncable="YES">
+        <attribute name="isOn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="enjoyers" inverseEntity="Expense"/>
+        <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="enjoyers" inverseEntity="Participant"/>
+    </entity>
+    <entity name="Expense" representedClassName="Expense" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toExpense" inverseEntity="Enjoyer"/>
+        <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toExpense" inverseEntity="Payer"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="expenses" inverseEntity="Party"/>
+    </entity>
+    <entity name="Participant" representedClassName="Participant" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toParticipant" inverseEntity="Enjoyer"/>
+        <relationship name="oldStilePartner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="oldStilePartner" inverseEntity="Participant"/>
+        <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toParticipant" inverseEntity="Payer"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="participants" inverseEntity="Party"/>
+    </entity>
+    <entity name="Party" representedClassName="Party" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="theme" optional="YES" attributeType="String"/>
+        <relationship name="expenses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Expense" inverseName="toParty" inverseEntity="Expense"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Participant" inverseName="toParty" inverseEntity="Participant"/>
+    </entity>
+    <entity name="Payer" representedClassName="Payer" syncable="YES">
+        <attribute name="isOn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="payers" inverseEntity="Expense"/>
+        <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="payers" inverseEntity="Participant"/>
+    </entity>
+    <configuration name="Private">
+        <memberEntity name="Enjoyer"/>
+        <memberEntity name="Expense"/>
+        <memberEntity name="Participant"/>
+        <memberEntity name="Party"/>
+        <memberEntity name="Payer"/>
+    </configuration>
+</model>

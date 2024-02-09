@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(Party)
+public class Party: NSManagedObject {
+
+}
+
