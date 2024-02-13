@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct EnjoyersNewView: View {
+    
+    @Binding var newExpenseEnjoyers: [Enjoyer]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach($newExpenseEnjoyers) { $enjoyer in
+                HStack {
+                    Toggle(isOn: $enjoyer.bandera){}
+                    Spacer()
+                    Text(enjoyer.toParticipant!.wName)
+                    Spacer()
+                    TextField("Amount", value: $enjoyer.amount, format: .number)
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    EnjoyersNewView()
 }

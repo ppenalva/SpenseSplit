@@ -7,12 +7,21 @@
 
 import SwiftUI
 
-struct ReceiverNewView: View {
+struct ReceiversNewView: View {
+    
+    @Binding var newPaymentEnjoyers: [Enjoyer]
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach($newPaymentEnjoyers) { $enjoyer in
+                HStack {
+                    Toggle(isOn: $enjoyer.bandera){}
+                    Spacer()
+                    Text(enjoyer.toParticipant!.wName)
+                    Spacer()
+                    TextField("Amount", value: $enjoyer.amount, format: .number)
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    ReceiverNewView()
 }

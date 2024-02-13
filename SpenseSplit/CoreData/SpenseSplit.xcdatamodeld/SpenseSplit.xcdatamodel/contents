@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Enjoyer" representedClassName="Enjoyer" syncable="YES">
-        <attribute name="isOn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="enjoyers" inverseEntity="Expense"/>
         <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="enjoyers" inverseEntity="Participant"/>
+        <relationship name="toPayment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Payment" inverseName="enjoyers" inverseEntity="Payment"/>
     </entity>
     <entity name="Expense" representedClassName="Expense" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -15,7 +17,6 @@
     <entity name="Participant" representedClassName="Participant" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toParticipant" inverseEntity="Enjoyer"/>
-        <relationship name="oldStilePartner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="oldStilePartner" inverseEntity="Participant"/>
         <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toParticipant" inverseEntity="Payer"/>
         <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="participants" inverseEntity="Party"/>
     </entity>
@@ -24,11 +25,21 @@
         <attribute name="theme" optional="YES" attributeType="String"/>
         <relationship name="expenses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Expense" inverseName="toParty" inverseEntity="Expense"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Participant" inverseName="toParty" inverseEntity="Participant"/>
+        <relationship name="payments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Payment" inverseName="toParty" inverseEntity="Payment"/>
     </entity>
     <entity name="Payer" representedClassName="Payer" syncable="YES">
-        <attribute name="isOn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="payers" inverseEntity="Expense"/>
         <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="payers" inverseEntity="Participant"/>
+        <relationship name="toPayment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Payment" inverseName="payers" inverseEntity="Payment"/>
+    </entity>
+    <entity name="Payment" representedClassName="Payment" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toPayment" inverseEntity="Enjoyer"/>
+        <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toPayment" inverseEntity="Payer"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="payments" inverseEntity="Party"/>
     </entity>
     <configuration name="Private">
         <memberEntity name="Enjoyer"/>
@@ -36,5 +47,6 @@
         <memberEntity name="Participant"/>
         <memberEntity name="Party"/>
         <memberEntity name="Payer"/>
+        <memberEntity name="Payment"/>
     </configuration>
 </model>

@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct PayersDetailView: View {
+    
+    @ObservedObject var expense: Expense
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach($expense.payersArray) { $payer in
+                HStack {
+                    Toggle(isOn: $payer.bandera){}
+                    Spacer()
+                    Text(payer.toParticipant!.wName)
+                    Spacer()
+                    TextField("Amount", value: $payer.amount, format: .number)
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    PayersDetailView()
 }

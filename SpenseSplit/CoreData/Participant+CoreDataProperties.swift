@@ -16,10 +16,9 @@ extension Participant {
     }
 
     @NSManaged public var name: String?
-    @NSManaged public var oldStilePartner: Participant?
     @NSManaged public var toParty: Party?
     
-    public var wrappedName: String {
+    public var wName: String {
         get {name ?? ""}
         set {self.name = String(newValue)
             objectWillChange.send()
