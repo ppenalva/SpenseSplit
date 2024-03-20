@@ -7,9 +7,8 @@
 
 import CloudKit
 import CoreData
-// import Foundation
 import SwiftUI
-// import UIKit
+
 
 struct PartyDetailView: View {
     

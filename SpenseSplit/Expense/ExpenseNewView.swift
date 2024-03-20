@@ -66,7 +66,7 @@ struct ExpenseNewView: View {
         }
             .sheet(isPresented: $isPresentingNewPayersView) {
                 NavigationView {
-                    PayersNewView(newExpensePayers: $newExpensePayers)
+                    PayersNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount,newExpensePayers: $newExpensePayers)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {

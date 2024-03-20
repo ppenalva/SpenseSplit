@@ -6,9 +6,9 @@
 //
 
 import CloudKit
-import Foundation
+//import Foundation
 import SwiftUI
-import UIKit
+//import UIKit
 
 struct CloudSharingView: UIViewControllerRepresentable {
     let share: CKShare

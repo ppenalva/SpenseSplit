@@ -5,11 +5,11 @@
 //  Created by Pablo Penalva on 9/2/24.
 //
 
-import CloudKit
+//import CloudKit
 import CoreData
-// import Foundation
+
 import SwiftUI
-// import UIKit
+
 
 struct PartyNewView: View {
     
