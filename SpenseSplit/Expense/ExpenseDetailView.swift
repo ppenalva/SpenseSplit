@@ -10,10 +10,20 @@ import SwiftUI
 struct ExpenseDetailView: View {
     
     @ObservedObject var expense: Expense
+    @Binding var theId: Int
     
     @State private var isPresentingDetailPayersView = false
     @State private var isPresentingDetailEnjoyersView = false
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+        theId += 1
+        self.presentationMode.wrappedValue.dismiss()
+    }) {
+        Text(expense.toParty!.wName)
+    }
+    }
     
     var body: some View {
         List {
@@ -23,13 +33,11 @@ struct ExpenseDetailView: View {
             }
             HStack {
                 Button ("Payers") {
-                    
                     isPresentingDetailPayersView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 Spacer()
                 Button ("Enjoyers") {
-                    
                     isPresentingDetailEnjoyersView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
@@ -57,41 +65,43 @@ struct ExpenseDetailView: View {
                 }
             }
         }
-            .sheet(isPresented: $isPresentingDetailPayersView) {
-                NavigationView {
-                    PayersDetailView(expense: expense)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    isPresentingDetailPayersView = false
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    isPresentingDetailPayersView = false
-                                }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
+        .sheet(isPresented: $isPresentingDetailPayersView) {
+            NavigationView {
+                PayersDetailView(expense: expense)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentingDetailPayersView = false
                             }
                         }
-                }
-            }
-            .sheet(isPresented: $isPresentingDetailEnjoyersView) {
-                NavigationView {
-                    EnjoyersDetailView(expense: expense)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    isPresentingDetailEnjoyersView = false
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    isPresentingDetailEnjoyersView = false
-                                }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                isPresentingDetailPayersView = false
                             }
                         }
-                }
+                    }
             }
-            
         }
+        .sheet(isPresented: $isPresentingDetailEnjoyersView) {
+            NavigationView {
+                EnjoyersDetailView(expense: expense)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentingDetailEnjoyersView = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                isPresentingDetailEnjoyersView = false
+                            }
+                        }
+                    }
+            }
+        }
+        
     }
+}
 

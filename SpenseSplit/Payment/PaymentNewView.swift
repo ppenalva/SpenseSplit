@@ -14,13 +14,13 @@ struct PaymentNewView: View {
     @Binding var newPaymentPayers: [Payer]
     @Binding var newPaymentEnjoyers: [Enjoyer]
     
-    @State var newPaymentPayers1: [Payer] = []
-    @State var newPaymentEnjoyers1: [Enjoyer] = []
-    
     private let stack = CoreDataStack.shared
     
     @State private var isPresentingNewSendersView = false
     @State private var isPresentingNewReceiversView = false
+    
+    @State private var contadorSenders = 0
+    @State private var contadorReceivers = 0
     
     var body: some View {
         List {
@@ -29,20 +29,26 @@ struct PaymentNewView: View {
                 TextField("Amount", value: $newPaymentAmount, format: .number)
             }
             HStack {
+                HStack{
                 Button ("Senders") {
                     
                     isPresentingNewSendersView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
+                    Text(contadorSenders, format: .number)
+                }
                 Spacer()
+                HStack{
                 Button ("Receivers") {
                     
                     isPresentingNewReceiversView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
+                    Text(contadorReceivers, format: .number)
+                }
             }
             Section(header: Text("Senders")) {
-                ForEach($newPaymentPayers1) { $payer in
+                ForEach(newPaymentPayers) { payer in
                     if (payer.bandera) {
                         HStack{
                             Text(payer.toParticipant!.wName)
@@ -53,7 +59,7 @@ struct PaymentNewView: View {
                 }
             }
             Section(header: Text("Receivers")) {
-                ForEach($newPaymentEnjoyers1) { $enjoyer in
+                ForEach(newPaymentEnjoyers) { enjoyer in
                     if (enjoyer.bandera) {
                         HStack{
                             Text(enjoyer.toParticipant!.wName)
@@ -66,7 +72,7 @@ struct PaymentNewView: View {
         }
             .sheet(isPresented: $isPresentingNewSendersView) {
                 NavigationView {
-                    SendersNewView(newPaymentPayers: $newPaymentPayers)
+                    SendersNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentPayers: $newPaymentPayers)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {
@@ -78,7 +84,12 @@ struct PaymentNewView: View {
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Add") {
-                                    newPaymentPayers1 = newPaymentPayers
+                                    contadorSenders = 0
+                                    for payer in newPaymentPayers {
+                                        if (payer.bandera) {
+                                            contadorSenders += 1
+                                        }
+                                    }
                                     isPresentingNewSendersView = false
                                 }
                             }
@@ -87,19 +98,24 @@ struct PaymentNewView: View {
             }
             .sheet(isPresented: $isPresentingNewReceiversView) {
                 NavigationView {
-                    ReceiversNewView(newPaymentEnjoyers: $newPaymentEnjoyers)
+                    ReceiversNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentEnjoyers: $newPaymentEnjoyers)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {
-                                    for payer in newPaymentPayers {
-                                        payer.bandera = false
+                                    for enjoyer in newPaymentEnjoyers {
+                                        enjoyer.bandera = false
                                     }
                                     isPresentingNewReceiversView = false
                                 }
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Add") {
-                                    newPaymentEnjoyers1 = newPaymentEnjoyers
+                                    contadorReceivers = 0
+                                    for enjoyer in newPaymentEnjoyers {
+                                        if (enjoyer.bandera) {
+                                            contadorReceivers += 1
+                                        }
+                                    }
                                     isPresentingNewReceiversView = false
                                 }
                             }

@@ -10,10 +10,20 @@ import SwiftUI
 struct PaymentDetailView: View {
     
     @ObservedObject var payment: Payment
+    @Binding var theId: Int
     
     @State private var isPresentingDetailSendersView = false
     @State private var isPresentingDetailReceiversView = false
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var btnBack : some View { Button(action: {
+        theId += 1
+        self.presentationMode.wrappedValue.dismiss()
+    }) {
+        Text(payment.toParty!.wName)
+    }
+    }
     
     var body: some View {
         List {
@@ -57,41 +67,43 @@ struct PaymentDetailView: View {
                 }
             }
         }
-            .sheet(isPresented: $isPresentingDetailSendersView) {
-                NavigationView {
-                    SendersDetailView(payment: payment)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    isPresentingDetailSendersView = false
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    isPresentingDetailSendersView = false
-                                }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: btnBack)
+        .sheet(isPresented: $isPresentingDetailSendersView) {
+            NavigationView {
+                SendersDetailView(payment: payment)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentingDetailSendersView = false
                             }
                         }
-                }
-            }
-            .sheet(isPresented: $isPresentingDetailReceiversView) {
-                NavigationView {
-                    ReceiversDetailView(payment: payment)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    isPresentingDetailReceiversView = false
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    isPresentingDetailReceiversView = false
-                                }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                isPresentingDetailSendersView = false
                             }
                         }
-                }
+                    }
             }
-            
         }
+        .sheet(isPresented: $isPresentingDetailReceiversView) {
+            NavigationView {
+                ReceiversDetailView(payment: payment)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentingDetailReceiversView = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                isPresentingDetailReceiversView = false
+                            }
+                        }
+                    }
+            }
+        }
+        
     }
+}
 

@@ -9,7 +9,6 @@ import CloudKit
 import CoreData
 import SwiftUI
 
-
 struct PartyDetailView: View {
     
     @ObservedObject var party: Party
@@ -39,7 +38,14 @@ struct PartyDetailView: View {
     @State var newPaymentPayers: [Payer] = []
     @State var newPaymentEnjoyers: [Enjoyer] = []
     
-    //    @State private var viewID: Int = 0
+    struct work01 {
+        var participant: Participant
+        var amount: Double
+    }
+    @State private var work01s: [work01] = []
+    @State private var work02s: [work01] = []
+    
+    @State var theId = 0
     
     init(party: Party) {
         self.party = party
@@ -59,7 +65,7 @@ struct PartyDetailView: View {
     
     var body: some View {
         List {
-            Section(header: Text("Party Info")) {
+            Section(header: Text("Party Info" )) {
                 TextField("Name", text: $party.wName)
                 ThemePicker(selection: $party.wTheme)
             }
@@ -107,7 +113,6 @@ struct PartyDetailView: View {
                 .buttonStyle(BorderlessButtonStyle())
                 Spacer()
                 Button("Summary") {
-                    // logica Resumen
                     isPresentingSummaryView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
@@ -115,7 +120,104 @@ struct PartyDetailView: View {
             Section(header: Text("Participants")) {
                 
                 ForEach(party.participantsArray) { participant in
-                    Text(participant.wName)
+                    let c = calculateTotal(participant: participant)
+                    HStack {
+                        Text(participant.wName)
+                        Spacer()
+                        Text(String(format: "%.2f",c))
+                    }
+                    .swipeActions {
+                        
+                        Button(role: .none) {
+                            
+                            //             Calculo de importes a cobrar
+                            //         crear matriz con los importes a cobrar
+                            work01s = []
+                            for participant in (party.participantsArray) {
+                            work01s.append(work01(participant: participant, amount: calculateTotal(participant: participant)))
+                            }
+                            // ordenar la matriz
+                            work01s.sort { (lhs: work01, rhs: work01) in
+                            return lhs.amount > rhs.amount
+                            }
+                            // crear matriz con los cobros propuestos
+                            work02s = []
+                            var work03 = c * -1
+                            for entry in work01s {
+                            if work03 > 0.0 {
+                            if (entry.amount > work03) {
+                            work02s.append(work01(participant: entry.participant, amount: work03))
+                                break
+                            } else {
+                            work02s.append(work01(participant: entry.participant, amount: entry.amount))
+                            work03 -= entry.amount
+                            }
+                        }
+                    }
+                    // crear el pago automatico
+                            
+                    newPaymentName = "Closing of   \(participant.wName)"
+                    newPaymentAmount = c * -1
+                            
+                            for newPayer in party.participantsArray {
+                                
+                                let moc1 = party.managedObjectContext
+                                let payerEntity = NSEntityDescription.entity(forEntityName: "Payer", in: stack.context)!
+                                let payer = Payer(entity: payerEntity, insertInto: moc1)
+                                payer.toParticipant = newPayer
+                                if (newPayer == participant)
+                                {
+                                    payer.bandera = true
+                                    payer.amount = c * -1
+                                    newPaymentPayers.append(payer)
+                                } else {
+                                    payer.bandera = false
+                                    payer.amount = 0.0
+                                    newPaymentPayers.append(payer)
+                                }
+                            }
+                            
+                            for newEnjoyer in party.participantsArray {
+                                
+                                var found = false
+                                
+                                let moc1 = party.managedObjectContext
+                                let enjoyerEntity = NSEntityDescription.entity(forEntityName: "Enjoyer", in: stack.context)!
+                                let enjoyer = Enjoyer(entity: enjoyerEntity, insertInto: moc1)
+                                enjoyer.toParticipant = newEnjoyer
+                                
+                                for entry in work02s {
+                                    if (newEnjoyer == entry.participant)
+                                    {
+                                        enjoyer.bandera = true
+                                        enjoyer.amount = entry.amount
+                                        newPaymentEnjoyers.append(enjoyer)
+                                        found = true
+                                    }
+                                }
+                                if (found == false) {
+                                    enjoyer.bandera = false
+                                    enjoyer.amount = 0.0
+                                    newPaymentEnjoyers.append(enjoyer)
+                                }
+                            }
+                            isPresentingNewPaymentView = true
+                        }
+                    label: {
+                        Label("Liq", systemImage: "banknote")
+                    }
+                    .tint(.orange)
+                        Button(role: .destructive ) {
+                            withAnimation {
+                                stack.context.delete(participant)
+                                stack.save()
+                            }
+                        }
+                    label: {
+                        Label("Del", systemImage: "trash")
+                    }
+                    .tint(.red)
+                    }
                 }
                 .onDelete (perform: deleteParticipant)
                 HStack {
@@ -138,7 +240,7 @@ struct PartyDetailView: View {
             }
             Section(header: Text("Expenses")) {
                 ForEach(party.expensesArray) { expense in
-                    NavigationLink(destination: ExpenseDetailView(expense: expense)) {
+                    NavigationLink(destination: ExpenseDetailView(expense: expense, theId: $theId)) {
                         HStack {
                             Label(expense.wName, systemImage: "r.circle")
                         }
@@ -148,7 +250,7 @@ struct PartyDetailView: View {
             }
             Section(header: Text("Payements")) {
                 ForEach(party.paymentsArray) { payment in
-                    NavigationLink(destination: PaymentDetailView(payment: payment)) {
+                    NavigationLink(destination: PaymentDetailView(payment: payment, theId: $theId)) {
                         HStack {
                             Label(payment.wName, systemImage: "r.circle")
                         }
@@ -157,6 +259,7 @@ struct PartyDetailView: View {
                 .onDelete(perform: deletePayments)
             }
         }
+        .id(theId)
         .navigationTitle(party.wName)
         .toolbar {
             ToolbarItem {
@@ -164,20 +267,20 @@ struct PartyDetailView: View {
                     if sharing {
                         ProgressView()
                     }
-                    //                 if isOwner {
-                    Button {
-                        if isShared {
-                            showShareController = true
-                        } else {
-                            Task.detached {
-                                await createShare(party)
+                    if ( !isShared || isOwner) {
+                        Button {
+                            if (isShared) {
+                                showShareController = true
+                            } else {
+                                Task.detached {
+                                    await createShare(party)
+                                }
                             }
                         }
+                    label: {
+                        Image(systemName: "square.and.arrow.up")
                     }
-                label: {
-                    Image(systemName: "square.and.arrow.up")
-                }
-                    //                  }
+                    }
                 }
                 .controlGroupStyle(.navigation)
             }
@@ -213,22 +316,10 @@ struct PartyDetailView: View {
                                 expense.amount = newExpenseAmount
                                 expense.toParty = party
                                 for newPayer  in newExpensePayers {
-                                    let moc1 = party.managedObjectContext
-                                    let payerEntity = NSEntityDescription.entity(forEntityName: "Payer", in: stack.context)!
-                                    let payer = Payer(entity: payerEntity, insertInto: moc1)
-                                    payer.toParticipant = newPayer.toParticipant
-                                    payer.bandera = newPayer.bandera
-                                    stack.context.insert(payer)
-                                    expense.payersArray.append(payer)
+                                    expense.payersArray.append(newPayer)
                                 }
                                 for newEnjoyer in newExpenseEnjoyers {
-                                    let moc1 = party.managedObjectContext
-                                    let enjoyerEntity = NSEntityDescription.entity(forEntityName: "Enjoyer", in: stack.context)!
-                                    let enjoyer = Enjoyer(entity: enjoyerEntity, insertInto: moc1)
-                                    enjoyer.toParticipant = newEnjoyer.toParticipant
-                                    enjoyer.bandera = newEnjoyer.bandera
-                                    stack.context.insert(enjoyer)
-                                    expense.enjoyersArray.append(enjoyer)
+                                    expense.enjoyersArray.append(newEnjoyer)
                                 }
                                 stack.context.insert(expense)
                                 stack.save()
@@ -265,22 +356,10 @@ struct PartyDetailView: View {
                                 payment.amount = newPaymentAmount
                                 payment.toParty = party
                                 for newPayer  in newPaymentPayers {
-                                    let moc1 = party.managedObjectContext
-                                    let payerEntity = NSEntityDescription.entity(forEntityName: "Payer", in: stack.context)!
-                                    let payer = Payer(entity: payerEntity, insertInto: moc1)
-                                    payer.toParticipant = newPayer.toParticipant
-                                    payer.bandera = newPayer.bandera
-                                    stack.context.insert(payer)
-                                    payment.payersArray.append(payer)
+                                    payment.payersArray.append(newPayer)
                                 }
                                 for newEnjoyer in newPaymentEnjoyers {
-                                    let moc1 = party.managedObjectContext
-                                    let enjoyerEntity = NSEntityDescription.entity(forEntityName: "Enjoyer", in: stack.context)!
-                                    let enjoyer = Enjoyer(entity: enjoyerEntity, insertInto: moc1)
-                                    enjoyer.toParticipant = newEnjoyer.toParticipant
-                                    enjoyer.bandera = newEnjoyer.bandera
-                                    stack.context.insert(enjoyer)
-                                    payment.enjoyersArray.append(enjoyer)
+                                    payment.enjoyersArray.append(newEnjoyer)
                                 }
                                 stack.context.insert(payment)
                                 stack.save()
@@ -294,54 +373,19 @@ struct PartyDetailView: View {
                     }
             }
         }
-    }
-    private func openSharingController(party: Party, participant: Participant, expense: Expense, payment: Payment) {
-        let keyWindow = UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .map { $0 as? UIWindowScene }
-            .compactMap { $0 }
-            .first?.windows
-            .filter { $0.isKeyWindow }.first
-        
-        //       let cloudSharingController = UICloudSharingController { (share: CKshare, container: CKcontainer)
-        
-        
-        let sharingController = UICloudSharingController {
-            (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
-            stack.persistentContainer.share([party], to: nil) { _, share, container, error in
-                if let actualShare = share {
-                    party.managedObjectContext?.performAndWait {
-                        actualShare[CKShare.SystemFieldKey.title] = party.name
+        .sheet(isPresented: $isPresentingSummaryView) {
+            NavigationView {
+                SummaryView(party: party)
+                    .navigationTitle("Summary")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Back") {
+                                isPresentingSummaryView = false
+                            }
+                        }
                     }
-                }
-                completion(share, container, error)
-            }
-            stack.persistentContainer.share([participant], to: nil) { _, share, container, error in
-                if let actualShare = share {
-                    participant.managedObjectContext?.performAndWait {
-                        actualShare[CKShare.SystemFieldKey.title] = participant.name
-                    }
-                }
-                completion(share, container, error)
-            }
-            stack.persistentContainer.share([expense], to: nil) { _, share, container, error in
-                if let actualShare = share {
-                    expense.managedObjectContext?.performAndWait {
-                        actualShare[CKShare.SystemFieldKey.title] = expense.name
-                    }
-                }
-                completion(share, container, error)
-            }
-            stack.persistentContainer.share([payment], to: nil) { _, share, container, error in
-                if let actualShare = share {
-                    payment.managedObjectContext?.performAndWait {
-                        actualShare[CKShare.SystemFieldKey.title] = payment.name
-                    }
-                }
-                completion(share, container, error)
             }
         }
-        keyWindow?.rootViewController?.present(sharingController, animated: true)
     }
     private var isShared: Bool {
         stack.isShared(object: party)
@@ -384,6 +428,16 @@ struct PartyDetailView: View {
                 stack.context.delete(participants[index])
             }
         }
+    }
+    func calculateTotal(participant: Participant) ->  Double {
+        var total = 0.0
+        for payment in participant.payersArray  {
+            total = total + payment.amount
+        }
+        for payment in participant.enjoyersArray {
+            total = total - payment.amount
+        }
+        return total
     }
 }
 

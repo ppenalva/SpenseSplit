@@ -5,17 +5,13 @@
 //  Created by Pablo Penalva on 9/2/24.
 //
 
-//import CloudKit
 import CoreData
-
 import SwiftUI
 
 
 struct PartyNewView: View {
     
-    @Binding var newPartyName: String
-    @Binding var newPartyTheme: String
-    @Binding var newPartyParticipants: [Participant]
+    @ObservedObject var party: Party
     
     private let stack = CoreDataStack.shared
     
@@ -24,38 +20,41 @@ struct PartyNewView: View {
     var body: some View {
         List {
             Section(header: Text("Party Info")) {
-                TextField("Name", text: $newPartyName)
-               ThemePicker(selection: $newPartyTheme)
+                TextField("Name", text: $party.wName)
+                ThemePicker(selection: $party.wTheme)
             }
-            Section(header: Text("Participants")) {
-                ForEach( newPartyParticipants ) { participant in
-                    HStack {
-                        Text(participant.wName)
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            stack.context.delete(participant)
-                        }
-                    label: {
-                        Label("Del", systemImage: "trash")
-                    }
-                    }
-                }
-                HStack {
-                    TextField("New Participant", text: $newParticipantName)
-                    Button(action: {
-                        withAnimation {
-                            let participantEntity = NSEntityDescription.entity(forEntityName: "Participant", in: stack.context)!
-                            let newPartyParticipant = Participant(entity: participantEntity, insertInto: nil)
-                            newPartyParticipant.wName = newParticipantName
-                            newPartyParticipants.append(newPartyParticipant)
-                            newParticipantName = ""
-                        }
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                    }
-                    .disabled(newParticipantName.isEmpty)
-                }
+//            Section(header: Text("Participants")) {
+//                ForEach( party.participantsArray ) { participant in
+//                    HStack {
+//                        Text(participant.wName)
+//                    }
+//                }
+//                .onDelete (perform: deleteParticipant)
+//                HStack {
+//                    TextField("New Participant", text: $newParticipantName)
+//                    Button(action: {
+//                        withAnimation {
+//                            let moc1 = party.managedObjectContext
+//                            let participantEntity = NSEntityDescription.entity(forEntityName: "Participant", in: stack.context)!
+//                            let newParticipant = Participant(entity: participantEntity, insertInto: moc1)
+//                            newParticipant.wName = newParticipantName
+//                            newParticipant.toParty = party
+//                            party.participantsArray.append(newParticipant)
+//                            stack.context.insert(newParticipant)
+//                            newParticipantName = ""
+//                        }
+//                    }) {
+//                        Image(systemName: "plus.circle.fill")
+//                    }
+//                    .disabled(newParticipantName.isEmpty)
+//                }
+//            }
+        }
+    }
+    func deleteParticipant( at offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                stack.context.delete(party.participantsArray[index])
             }
         }
     }

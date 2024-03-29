@@ -11,6 +11,8 @@ struct PayersDetailView: View {
     
     @ObservedObject var expense: Expense
     
+    @State private var flag: Int = 0
+    
     var body: some View {
         List {
             HStack {
@@ -20,7 +22,7 @@ struct PayersDetailView: View {
             }
             ForEach($expense.payersArray) { $payer in
                 HStack {
-                    Toggle(isOn: $payer.bandera){}
+                    Toggle("",isOn: $payer.bandera)
                         .onTapGesture {
                             modificarAmount(payer: payer)
                         }
@@ -31,9 +33,11 @@ struct PayersDetailView: View {
                 }
             }
         }
+        Text("\(flag)")
     }
     func modificarAmount(payer: Payer ) {
         var counter = 0
+        flag += 1
         if (payer.bandera) {
             counter -= 1
         } else {

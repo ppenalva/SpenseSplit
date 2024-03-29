@@ -11,7 +11,7 @@ struct PartyView: View {
     
     @ObservedObject var party: Party
     
-    var theme: Theme = Theme(rawValue: "red") ?? .orange
+    var theme: Theme = Theme(rawValue: "red") ?? .poppy
     
     private let stack = CoreDataStack.shared
     

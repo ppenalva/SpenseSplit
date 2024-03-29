@@ -14,13 +14,13 @@ struct ExpenseNewView: View {
     @Binding var newExpensePayers: [Payer]
     @Binding var newExpenseEnjoyers: [Enjoyer]
     
-    @State var newExpensePayers1: [Payer] = []
-    @State var newExpenseEnjoyers1: [Enjoyer] = []
-    
     private let stack = CoreDataStack.shared
     
     @State private var isPresentingNewPayersView = false
     @State private var isPresentingNewEnjoyersView = false
+    
+    @State private var contadorPayers = 0
+    @State private var contadorEnjoyers = 0
     
     var body: some View {
         List {
@@ -29,20 +29,26 @@ struct ExpenseNewView: View {
                 TextField("Amount", value: $newExpenseAmount, format: .number)
             }
             HStack {
-                Button ("Payers") {
-                    
-                    isPresentingNewPayersView = true
+                HStack{
+                    Button ("Payers") {
+                        
+                        isPresentingNewPayersView = true
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    Text(contadorPayers, format: .number)
                 }
-                .buttonStyle(BorderlessButtonStyle())
                 Spacer()
-                Button ("Enjoyers") {
-                    
-                    isPresentingNewEnjoyersView = true
+                HStack{
+                    Button ("Enjoyers") {
+                        
+                        isPresentingNewEnjoyersView = true
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    Text(contadorEnjoyers, format: .number)
                 }
-                .buttonStyle(BorderlessButtonStyle())
             }
             Section(header: Text("Payers")) {
-                ForEach($newExpensePayers1) { $payer in
+                ForEach(newExpensePayers) { payer in
                     if (payer.bandera) {
                         HStack{
                             Text(payer.toParticipant!.wName)
@@ -53,7 +59,7 @@ struct ExpenseNewView: View {
                 }
             }
             Section(header: Text("Enjoyers")) {
-                ForEach($newExpenseEnjoyers1) { $enjoyer in
+                ForEach(newExpenseEnjoyers) { enjoyer in
                     if (enjoyer.bandera) {
                         HStack{
                             Text(enjoyer.toParticipant!.wName)
@@ -64,48 +70,60 @@ struct ExpenseNewView: View {
                 }
             }
         }
-            .sheet(isPresented: $isPresentingNewPayersView) {
-                NavigationView {
-                    PayersNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount,newExpensePayers: $newExpensePayers)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    for payer in newExpensePayers {
-                                        payer.bandera = false
-                                    }
-                                    isPresentingNewPayersView = false
+        
+        .sheet(isPresented: $isPresentingNewPayersView) {
+            NavigationView {
+                PayersNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount,newExpensePayers: $newExpensePayers)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                for payer in newExpensePayers {
+                                    payer.bandera = false
+                                    payer.amount = 0.0
                                 }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    newExpensePayers1 = newExpensePayers
-                                    isPresentingNewPayersView = false
-                                }
+                                isPresentingNewPayersView = false
                             }
                         }
-                }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                contadorPayers = 0
+                                for payer in newExpensePayers {
+                                    if (payer.bandera) {
+                                        contadorPayers += 1
+                                    }
+                                }
+                                isPresentingNewPayersView = false
+                            }
+                        }
+                    }
             }
-            .sheet(isPresented: $isPresentingNewEnjoyersView) {
-                NavigationView {
-                    EnjoyersNewView(newExpenseEnjoyers: $newExpenseEnjoyers)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    for payer in newExpensePayers {
-                                        payer.bandera = false
-                                    }
-                                    isPresentingNewEnjoyersView = false
+        }
+        .sheet(isPresented: $isPresentingNewEnjoyersView) {
+            NavigationView {
+                EnjoyersNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount,newExpenseEnjoyers: $newExpenseEnjoyers)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                for enjoyer in newExpenseEnjoyers {
+                                    enjoyer.bandera = false
                                 }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    newExpenseEnjoyers1 = newExpenseEnjoyers
-                                    isPresentingNewEnjoyersView = false
-                                }
+                                isPresentingNewEnjoyersView = false
                             }
                         }
-                }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Add") {
+                                contadorEnjoyers = 0
+                                for enjoyer in newExpenseEnjoyers {
+                                    if (enjoyer.bandera) {
+                                        contadorEnjoyers += 1
+                                    }
+                                }
+                                isPresentingNewEnjoyersView = false
+                            }
+                        }
+                    }
             }
         }
     }
+}
 

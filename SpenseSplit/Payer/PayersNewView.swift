@@ -13,7 +13,7 @@ struct PayersNewView: View {
     @Binding var newExpenseAmount: Double
     @Binding var newExpensePayers: [Payer]
     
-    @State var flag: Int = 0
+    @State private var flag: Int = 0
     
     var body: some View {
         List {
@@ -37,7 +37,6 @@ struct PayersNewView: View {
         }
         Text("\(flag)")
     }
-    
     func modificarAmount(payer: Payer ) {
         var counter = 0
         flag += 1
