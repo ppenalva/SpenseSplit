@@ -14,6 +14,7 @@ struct ThemePicker: View {
     
     var body: some View {
         Picker("Theme", selection: $selection) {
+            Text("").tag("")
             ForEach(Theme.allCases) { theme in
                 HStack {
                     Image(uiImage: colorSwatchImage(color: theme.mainColorUI)
