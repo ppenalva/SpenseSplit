@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(PayerLog)
+public class PayerLog: NSManagedObject {
+
+}

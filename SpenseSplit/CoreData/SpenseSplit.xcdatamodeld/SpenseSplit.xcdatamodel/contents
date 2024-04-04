@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Enjoyer" representedClassName="Enjoyer" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -7,25 +7,56 @@
         <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="enjoyers" inverseEntity="Participant"/>
         <relationship name="toPayment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Payment" inverseName="enjoyers" inverseEntity="Payment"/>
     </entity>
+    <entity name="EnjoyerLog" representedClassName="EnjoyerLog" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="toExpenseLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExpenseLog" inverseName="enjoyersLog" inverseEntity="ExpenseLog"/>
+        <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="enjoyersLog" inverseEntity="Participant"/>
+        <relationship name="toPaymentLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PaymentLog" inverseName="enjoyersLog" inverseEntity="PaymentLog"/>
+    </entity>
     <entity name="Expense" representedClassName="Expense" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toExpense" inverseEntity="Enjoyer"/>
+        <relationship name="expenseChanges" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExpenseChanges" inverseName="toExpense" inverseEntity="ExpenseChanges"/>
         <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toExpense" inverseEntity="Payer"/>
         <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="expenses" inverseEntity="Party"/>
+    </entity>
+    <entity name="ExpenseChanges" representedClassName="ExpenseChanges" syncable="YES">
+        <attribute name="when" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="who" optional="YES" attributeType="String"/>
+        <relationship name="after" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExpenseLog" inverseName="afters" inverseEntity="ExpenseLog"/>
+        <relationship name="before" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExpenseLog" inverseName="befores" inverseEntity="ExpenseLog"/>
+        <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="expenseChanges" inverseEntity="Expense"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="expenseChanges" inverseEntity="Party"/>
+    </entity>
+    <entity name="ExpenseLog" representedClassName="ExpenseLog" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="afters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExpenseChanges" inverseName="after" inverseEntity="ExpenseChanges"/>
+        <relationship name="befores" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExpenseChanges" inverseName="before" inverseEntity="ExpenseChanges"/>
+        <relationship name="enjoyersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EnjoyerLog" inverseName="toExpenseLog" inverseEntity="EnjoyerLog"/>
+        <relationship name="payersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PayerLog" inverseName="toExpenseLog" inverseEntity="PayerLog"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="expensesLog" inverseEntity="Party"/>
     </entity>
     <entity name="Participant" representedClassName="Participant" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toParticipant" inverseEntity="Enjoyer"/>
+        <relationship name="enjoyersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EnjoyerLog" inverseName="toParticipant" inverseEntity="EnjoyerLog"/>
         <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toParticipant" inverseEntity="Payer"/>
+        <relationship name="payersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PayerLog" inverseName="toParticipant" inverseEntity="PayerLog"/>
         <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="participants" inverseEntity="Party"/>
     </entity>
     <entity name="Party" representedClassName="Party" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="theme" optional="YES" attributeType="String"/>
+        <relationship name="expenseChanges" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExpenseChanges" inverseName="toParty" inverseEntity="ExpenseChanges"/>
         <relationship name="expenses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Expense" inverseName="toParty" inverseEntity="Expense"/>
+        <relationship name="expensesLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExpenseLog" inverseName="toParty" inverseEntity="ExpenseLog"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Participant" inverseName="toParty" inverseEntity="Participant"/>
+        <relationship name="paymentChanges" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PaymentChanges" inverseName="toParty" inverseEntity="PaymentChanges"/>
         <relationship name="payments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Payment" inverseName="toParty" inverseEntity="Payment"/>
+        <relationship name="paymentsLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PaymentLog" inverseName="toParty" inverseEntity="PaymentLog"/>
     </entity>
     <entity name="Payer" representedClassName="Payer" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -34,19 +65,50 @@
         <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="payers" inverseEntity="Participant"/>
         <relationship name="toPayment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Payment" inverseName="payers" inverseEntity="Payment"/>
     </entity>
+    <entity name="PayerLog" representedClassName="PayerLog" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="toExpenseLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExpenseLog" inverseName="payersLog" inverseEntity="ExpenseLog"/>
+        <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="payersLog" inverseEntity="Participant"/>
+        <relationship name="toPaymentLog" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PaymentLog" inverseName="payersLog" inverseEntity="PaymentLog"/>
+    </entity>
     <entity name="Payment" representedClassName="Payment" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="enjoyers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Enjoyer" inverseName="toPayment" inverseEntity="Enjoyer"/>
         <relationship name="payers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Payer" inverseName="toPayment" inverseEntity="Payer"/>
+        <relationship name="paymentChanges" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PaymentChanges" inverseName="toPayment" inverseEntity="PaymentChanges"/>
         <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="payments" inverseEntity="Party"/>
     </entity>
-    <configuration name="Private">
+    <entity name="PaymentChanges" representedClassName="PaymentChanges" syncable="YES">
+        <attribute name="when" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="who" optional="YES" attributeType="String"/>
+        <relationship name="after" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PaymentLog" inverseName="afters" inverseEntity="PaymentLog"/>
+        <relationship name="before" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PaymentLog" inverseName="befores" inverseEntity="PaymentLog"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="paymentChanges" inverseEntity="Party"/>
+        <relationship name="toPayment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Payment" inverseName="paymentChanges" inverseEntity="Payment"/>
+    </entity>
+    <entity name="PaymentLog" representedClassName="PaymentLog" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="afters" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PaymentChanges" inverseName="after" inverseEntity="PaymentChanges"/>
+        <relationship name="befores" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PaymentChanges" inverseName="before" inverseEntity="PaymentChanges"/>
+        <relationship name="enjoyersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EnjoyerLog" inverseName="toPaymentLog" inverseEntity="EnjoyerLog"/>
+        <relationship name="payersLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PayerLog" inverseName="toPaymentLog" inverseEntity="PayerLog"/>
+        <relationship name="toParty" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Party" inverseName="paymentsLog" inverseEntity="Party"/>
+    </entity>
+    <configuration name="Private" usedWithCloudKit="YES">
         <memberEntity name="Enjoyer"/>
         <memberEntity name="Expense"/>
         <memberEntity name="Participant"/>
         <memberEntity name="Party"/>
         <memberEntity name="Payer"/>
         <memberEntity name="Payment"/>
+        <memberEntity name="ExpenseChanges"/>
+        <memberEntity name="PaymentChanges"/>
+        <memberEntity name="ExpenseLog"/>
+        <memberEntity name="PaymentLog"/>
+        <memberEntity name="EnjoyerLog"/>
+        <memberEntity name="PayerLog"/>
     </configuration>
 </model>

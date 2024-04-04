@@ -7,8 +7,6 @@
 
 import CloudKit
 import CoreData
-//import Foundation
-
 
 final class CoreDataStack {
     static let shared = CoreDataStack()
@@ -84,6 +82,20 @@ final class CoreDataStack {
 }
 
 extension CoreDataStack {
+    
+    /// async gets iCloud record ID object of logged-in iCloud user
+    func iCloudUserIDAsync(complete: @escaping (_ instance: CKRecord.ID?, _ error: NSError?) -> ()) {
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { (status, error) in
+            CKContainer.default().fetchUserRecordID { (record, error) in
+                CKContainer.default().discoverUserIdentity(withUserRecordID: record!, completionHandler: { (userID, error) in
+                    let fullName = (userID?.nameComponents?.givenName)! + " " + (userID?.nameComponents?.familyName)!
+                })
+            }
+        }
+    }
+
+
+    
     func isShared(objectID: NSManagedObjectID) -> Bool {
         var isShared = false
         if let persistentStore = objectID.persistentStore {
@@ -127,6 +139,20 @@ extension CoreDataStack {
         }
         return false
     }
+    
+    func userName(object: NSManagedObject) -> String {
+        guard isShared(object: object) else { return "No name" }
+        guard let share = try? persistentContainer.fetchShares(matching: [object.objectID])[object.objectID] else {
+            print("Get ckshare error")
+            return "No name."
+        }
+        if let currentUser = share.currentUserParticipant, currentUser == share.owner {
+            return CKCurrentUserDefaultName
+        }
+        
+        return CKCurrentUserDefaultName
+    }
+    
 
     func getShare(_ party: Party) -> CKShare? {
         guard isShared(object: party) else { return nil }

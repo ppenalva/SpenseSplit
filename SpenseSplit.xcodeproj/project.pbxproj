@@ -38,6 +38,21 @@
 		6E6BBE832B793FE4006CE2CA /* PaymentNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E6BBE822B793FE4006CE2CA /* PaymentNewView.swift */; };
 		6E7B02EE2BB014CB003761D9 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02ED2BB014CB003761D9 /* SummaryView.swift */; };
 		6E7B02F02BB014E9003761D9 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02EF2BB014E9003761D9 /* MailView.swift */; };
+		6E7B02F42BB6C934003761D9 /* ExpenseChanges+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02F32BB6C934003761D9 /* ExpenseChanges+CoreDataClass.swift */; };
+		6E7B02F62BB6C955003761D9 /* ExpenseChanges+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02F52BB6C955003761D9 /* ExpenseChanges+CoreDataProperties.swift */; };
+		6E7B02F82BB7FD85003761D9 /* PaymentChanges+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02F72BB7FD85003761D9 /* PaymentChanges+CoreDataClass.swift */; };
+		6E7B02FA2BB7FDA1003761D9 /* PaymentChanges+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02F92BB7FDA1003761D9 /* PaymentChanges+CoreDataProperties.swift */; };
+		6E7B02FC2BB87C42003761D9 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02FB2BB87C42003761D9 /* HistoryView.swift */; };
+		6E7B02FE2BB892A3003761D9 /* ExpenseLog+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02FD2BB892A3003761D9 /* ExpenseLog+CoreDataClass.swift */; };
+		6E7B03002BB892BC003761D9 /* ExpenseLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B02FF2BB892BC003761D9 /* ExpenseLog+CoreDataProperties.swift */; };
+		6E7B03022BB892D1003761D9 /* PaymentLog+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B03012BB892D1003761D9 /* PaymentLog+CoreDataClass.swift */; };
+		6E7B03042BB892E3003761D9 /* PaymentLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B03032BB892E3003761D9 /* PaymentLog+CoreDataProperties.swift */; };
+		6E7B03062BB9A6C2003761D9 /* PayerLog+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B03052BB9A6C2003761D9 /* PayerLog+CoreDataClass.swift */; };
+		6E7B03082BB9A6DA003761D9 /* PayerLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B03072BB9A6DA003761D9 /* PayerLog+CoreDataProperties.swift */; };
+		6E7B030A2BB9A6F2003761D9 /* EnjoyerLog+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B03092BB9A6F2003761D9 /* EnjoyerLog+CoreDataClass.swift */; };
+		6E7B030C2BB9A705003761D9 /* EnjoyerLog+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B030B2BB9A705003761D9 /* EnjoyerLog+CoreDataProperties.swift */; };
+		6E7B030E2BB9D248003761D9 /* ExpenseDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B030D2BB9D248003761D9 /* ExpenseDisplayView.swift */; };
+		6E7B03102BBA99B3003761D9 /* PaymentDispalyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B030F2BBA99B3003761D9 /* PaymentDispalyView.swift */; };
 		6E800E5F2B7A7CE00042B5B7 /* PayersNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E800E5E2B7A7CE00042B5B7 /* PayersNewView.swift */; };
 		6E800E612B7A7CF20042B5B7 /* EnjoyersNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E800E602B7A7CF20042B5B7 /* EnjoyersNewView.swift */; };
 		6E800E632B7AB99B0042B5B7 /* SendersNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E800E622B7AB99B0042B5B7 /* SendersNewView.swift */; };
@@ -83,6 +98,21 @@
 		6E6BBE822B793FE4006CE2CA /* PaymentNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentNewView.swift; sourceTree = "<group>"; };
 		6E7B02ED2BB014CB003761D9 /* SummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SummaryView.swift; path = "../../../../../Proyectos SwiftUI Cerrados/ExpenseSplit/ExpenseSplit/Views/Party/SummaryView.swift"; sourceTree = "<group>"; };
 		6E7B02EF2BB014E9003761D9 /* MailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MailView.swift; path = "../../../../../Proyectos SwiftUI Cerrados/ExpenseSplit/ExpenseSplit/Utilities/MailView.swift"; sourceTree = "<group>"; };
+		6E7B02F32BB6C934003761D9 /* ExpenseChanges+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpenseChanges+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B02F52BB6C955003761D9 /* ExpenseChanges+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpenseChanges+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B02F72BB7FD85003761D9 /* PaymentChanges+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaymentChanges+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B02F92BB7FDA1003761D9 /* PaymentChanges+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaymentChanges+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B02FB2BB87C42003761D9 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		6E7B02FD2BB892A3003761D9 /* ExpenseLog+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpenseLog+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B02FF2BB892BC003761D9 /* ExpenseLog+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpenseLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B03012BB892D1003761D9 /* PaymentLog+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaymentLog+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B03032BB892E3003761D9 /* PaymentLog+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaymentLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B03052BB9A6C2003761D9 /* PayerLog+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PayerLog+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B03072BB9A6DA003761D9 /* PayerLog+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PayerLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B03092BB9A6F2003761D9 /* EnjoyerLog+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnjoyerLog+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6E7B030B2BB9A705003761D9 /* EnjoyerLog+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnjoyerLog+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6E7B030D2BB9D248003761D9 /* ExpenseDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDisplayView.swift; sourceTree = "<group>"; };
+		6E7B030F2BBA99B3003761D9 /* PaymentDispalyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDispalyView.swift; sourceTree = "<group>"; };
 		6E800E5E2B7A7CE00042B5B7 /* PayersNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayersNewView.swift; sourceTree = "<group>"; };
 		6E800E602B7A7CF20042B5B7 /* EnjoyersNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnjoyersNewView.swift; sourceTree = "<group>"; };
 		6E800E622B7AB99B0042B5B7 /* SendersNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendersNewView.swift; sourceTree = "<group>"; };
@@ -173,6 +203,18 @@
 				6E6BBE5D2B768D7E006CE2CA /* Payer+CoreDataProperties.swift */,
 				6E6BBE5F2B768D91006CE2CA /* Enjoyer+CoreDataClass.swift */,
 				6E6BBE612B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift */,
+				6E7B02F32BB6C934003761D9 /* ExpenseChanges+CoreDataClass.swift */,
+				6E7B02F52BB6C955003761D9 /* ExpenseChanges+CoreDataProperties.swift */,
+				6E7B02F72BB7FD85003761D9 /* PaymentChanges+CoreDataClass.swift */,
+				6E7B02F92BB7FDA1003761D9 /* PaymentChanges+CoreDataProperties.swift */,
+				6E7B02FD2BB892A3003761D9 /* ExpenseLog+CoreDataClass.swift */,
+				6E7B02FF2BB892BC003761D9 /* ExpenseLog+CoreDataProperties.swift */,
+				6E7B03012BB892D1003761D9 /* PaymentLog+CoreDataClass.swift */,
+				6E7B03032BB892E3003761D9 /* PaymentLog+CoreDataProperties.swift */,
+				6E7B03052BB9A6C2003761D9 /* PayerLog+CoreDataClass.swift */,
+				6E7B03072BB9A6DA003761D9 /* PayerLog+CoreDataProperties.swift */,
+				6E7B03092BB9A6F2003761D9 /* EnjoyerLog+CoreDataClass.swift */,
+				6E7B030B2BB9A705003761D9 /* EnjoyerLog+CoreDataProperties.swift */,
 				6E6BBE4A2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -186,6 +228,7 @@
 				6E6BBE6A2B76A926006CE2CA /* PartyNewView.swift */,
 				6E6BBE662B76A901006CE2CA /* PartyDetailView.swift */,
 				6E7B02ED2BB014CB003761D9 /* SummaryView.swift */,
+				6E7B02FB2BB87C42003761D9 /* HistoryView.swift */,
 			);
 			path = Party;
 			sourceTree = "<group>";
@@ -213,6 +256,7 @@
 			children = (
 				6E6BBE7C2B78E061006CE2CA /* ExpenseDetailView.swift */,
 				6E6BBE802B793FD7006CE2CA /* ExpenseNewView.swift */,
+				6E7B030D2BB9D248003761D9 /* ExpenseDisplayView.swift */,
 			);
 			path = Expense;
 			sourceTree = "<group>";
@@ -222,6 +266,7 @@
 			children = (
 				6E6BBE7E2B78E070006CE2CA /* PaymentDetailView.swift */,
 				6E6BBE822B793FE4006CE2CA /* PaymentNewView.swift */,
+				6E7B030F2BBA99B3003761D9 /* PaymentDispalyView.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -319,28 +364,38 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E800E632B7AB99B0042B5B7 /* SendersNewView.swift in Sources */,
+				6E7B02FE2BB892A3003761D9 /* ExpenseLog+CoreDataClass.swift in Sources */,
 				6E6BBE7D2B78E061006CE2CA /* ExpenseDetailView.swift in Sources */,
+				6E7B03062BB9A6C2003761D9 /* PayerLog+CoreDataClass.swift in Sources */,
 				6E7B02F02BB014E9003761D9 /* MailView.swift in Sources */,
 				6E6BBE692B76A911006CE2CA /* PartyView.swift in Sources */,
 				6E6BBE4C2B7682AB006CE2CA /* SpenseSplit.xcdatamodeld in Sources */,
 				6E6BBE472B767F31006CE2CA /* CoreDataStack.swift in Sources */,
 				6E6BBE582B768D41006CE2CA /* Expense+CoreDataClass.swift in Sources */,
+				6E7B02FC2BB87C42003761D9 /* HistoryView.swift in Sources */,
 				6E6BBE652B769817006CE2CA /* PartiesView.swift in Sources */,
 				6E6BBE452B767EEE006CE2CA /* AppDelegate.swift in Sources */,
 				6E6BBE732B78CA3F006CE2CA /* Theme.swift in Sources */,
 				6E6BBE6B2B76A926006CE2CA /* PartyNewView.swift in Sources */,
 				6E6BBE622B768DA2006CE2CA /* Enjoyer+CoreDataProperties.swift in Sources */,
 				6E6BBE522B768CF2006CE2CA /* Party+CoreDataProperties.swift in Sources */,
+				6E7B02FA2BB7FDA1003761D9 /* PaymentChanges+CoreDataProperties.swift in Sources */,
 				6E800E6B2B7B1F600042B5B7 /* SendersDetailView.swift in Sources */,
 				6E6BBE752B78CA44006CE2CA /* ThemePicker.swift in Sources */,
 				6E6BBE562B768D2B006CE2CA /* Participant+CoreDataProperties.swift in Sources */,
+				6E7B03002BB892BC003761D9 /* ExpenseLog+CoreDataProperties.swift in Sources */,
 				6E800E692B7AC1D60042B5B7 /* EnjoyersDetailView.swift in Sources */,
+				6E7B03042BB892E3003761D9 /* PaymentLog+CoreDataProperties.swift in Sources */,
 				6E6BBE602B768D91006CE2CA /* Enjoyer+CoreDataClass.swift in Sources */,
 				6E7B02EE2BB014CB003761D9 /* SummaryView.swift in Sources */,
+				6E7B030C2BB9A705003761D9 /* EnjoyerLog+CoreDataProperties.swift in Sources */,
+				6E7B030E2BB9D248003761D9 /* ExpenseDisplayView.swift in Sources */,
 				6E800E652B7AB9AE0042B5B7 /* ReceiversNewView.swift in Sources */,
 				6E6BBE542B768D16006CE2CA /* Participant+CoreDataClass.swift in Sources */,
 				6E6BBE772B78DCE5006CE2CA /* Payment+CoreDataClass.swift in Sources */,
 				6E6BBE832B793FE4006CE2CA /* PaymentNewView.swift in Sources */,
+				6E7B02F62BB6C955003761D9 /* ExpenseChanges+CoreDataProperties.swift in Sources */,
+				6E7B03082BB9A6DA003761D9 /* PayerLog+CoreDataProperties.swift in Sources */,
 				6E800E672B7AC1C80042B5B7 /* PayersDetailView.swift in Sources */,
 				6E6BBE5A2B768D54006CE2CA /* Expense+CoreDataProperties.swift in Sources */,
 				6E6BBE672B76A901006CE2CA /* PartyDetailView.swift in Sources */,
@@ -349,11 +404,16 @@
 				6E6BBE812B793FD7006CE2CA /* ExpenseNewView.swift in Sources */,
 				6E6BBE792B78DCFB006CE2CA /* Payment+CoreDataProperties.swift in Sources */,
 				6E800E6D2B7B1F700042B5B7 /* ReceiversDetailView.swift in Sources */,
+				6E7B02F82BB7FD85003761D9 /* PaymentChanges+CoreDataClass.swift in Sources */,
+				6E7B03022BB892D1003761D9 /* PaymentLog+CoreDataClass.swift in Sources */,
 				6E800E612B7A7CF20042B5B7 /* EnjoyersNewView.swift in Sources */,
+				6E7B02F42BB6C934003761D9 /* ExpenseChanges+CoreDataClass.swift in Sources */,
 				6E6BBE5E2B768D7E006CE2CA /* Payer+CoreDataProperties.swift in Sources */,
 				6E6BBE7F2B78E070006CE2CA /* PaymentDetailView.swift in Sources */,
+				6E7B030A2BB9A6F2003761D9 /* EnjoyerLog+CoreDataClass.swift in Sources */,
 				6E6BBE332B767C88006CE2CA /* SpenseSplitApp.swift in Sources */,
 				6E6BBE502B768CD8006CE2CA /* Party+CoreDataClass.swift in Sources */,
+				6E7B03102BBA99B3003761D9 /* PaymentDispalyView.swift in Sources */,
 				6E800E5F2B7A7CE00042B5B7 /* PayersNewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

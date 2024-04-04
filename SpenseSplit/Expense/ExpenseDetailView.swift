@@ -6,19 +6,34 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ExpenseDetailView: View {
     
-    @ObservedObject var expense: Expense
+    @Binding var expense: Expense
     @Binding var theId: Int
+    
+    private let stack = CoreDataStack.shared
     
     @State private var isPresentingDetailPayersView = false
     @State private var isPresentingDetailEnjoyersView = false
+    
+    struct PayerEnjoyer {
+        var bandera: Bool
+        var amount: Double
+        var toParticipant: Participant
+    }
+    
+    @State private var expenseBeforeName = ""
+    @State private var expenseBeforeAmount = 0.0
+    @State private var expenseBeforePayers: [PayerEnjoyer] = []
+    @State private var expenseBeforeEnjoyers: [PayerEnjoyer] = []
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var btnBack : some View { Button(action: {
         theId += 1
+        createHistory()
         self.presentationMode.wrappedValue.dismiss()
     }) {
         Text(expense.toParty!.wName)
@@ -101,7 +116,87 @@ struct ExpenseDetailView: View {
                     }
             }
         }
+        .onAppear(perform: keepInitial)
+    }
+    func keepInitial() {
+
+        expenseBeforeName = expense.wName
+        expenseBeforeAmount = expense.amount
+        for payer in expense.payersArray {
+            let a = PayerEnjoyer(bandera: payer.bandera, amount: payer.amount, toParticipant: payer.toParticipant!)
+            expenseBeforePayers.append(a)
+        }
+        for enjoyer in expense.enjoyersArray {
+            let a = PayerEnjoyer(bandera: enjoyer.bandera, amount: enjoyer.amount, toParticipant: enjoyer.toParticipant!)
+            expenseBeforeEnjoyers.append(a)
+        }
+    }
+    func createHistory() {
         
+        let moc1 = expense.toParty?.managedObjectContext
+        let expenseLogEntity = NSEntityDescription.entity(forEntityName: "ExpenseLog", in: stack.context)!
+        let payerLogEntity = NSEntityDescription.entity(forEntityName: "PayerLog", in: stack.context)!
+        let enjoyerLogEntity = NSEntityDescription.entity(forEntityName: "EnjoyerLog", in: stack.context)!
+        
+        let expenseBefore = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+        expenseBefore.wName = expenseBeforeName
+        expenseBefore.amount = expenseBeforeAmount
+        for payer in expenseBeforePayers {
+            let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+            payerLog.bandera = payer.bandera
+            payerLog.amount = payer.amount
+            payerLog.toParticipant = payer.toParticipant
+            payerLog.toExpenseLog = expenseBefore
+            stack.context.insert(payerLog)
+            expenseBefore.payersLogArray.append(payerLog)
+        }
+        for enjoyer in expenseBeforeEnjoyers {
+            let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+            enjoyerLog.bandera = enjoyer.bandera
+            enjoyerLog.amount = enjoyer.amount
+            enjoyerLog.toParticipant = enjoyer.toParticipant
+            enjoyerLog.toExpenseLog = expenseBefore
+            stack.context.insert(enjoyerLog)
+            expenseBefore.enjoyersLogArray.append(enjoyerLog)
+        }
+        expenseBefore.toParty = expense.toParty
+        stack.context.insert(expenseBefore)
+        
+        let expenseAfter = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+        expenseAfter.wName = expense.wName
+        expenseAfter.amount = expense.amount
+        for payer in expense.payersArray {
+            let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+            payerLog.bandera = payer.bandera
+            payerLog.amount = payer.amount
+            payerLog.toParticipant = payer.toParticipant
+            payerLog.toExpenseLog = expenseAfter
+            stack.context.insert(payerLog)
+            expenseAfter.payersLogArray.append(payerLog)
+        }
+        for enjoyer in expense.enjoyersArray {
+            let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+            enjoyerLog.bandera = enjoyer.bandera
+            enjoyerLog.amount = enjoyer.amount
+            enjoyerLog.toParticipant = enjoyer.toParticipant
+            enjoyerLog.toExpenseLog = expenseAfter
+            stack.context.insert(enjoyerLog)
+            expenseAfter.enjoyersLogArray.append(enjoyerLog)
+        }
+        expenseAfter.toParty = expense.toParty
+        stack.context.insert(expenseAfter)
+        
+        let expenseChangesEntity = NSEntityDescription.entity(forEntityName: "ExpenseChanges", in: stack.context)!
+        let expenseChanges = ExpenseChanges(entity: expenseChangesEntity, insertInto: moc1)
+        
+        expenseChanges.when = Date()
+        expenseChanges.before = expenseBefore
+        expenseChanges.after = expenseAfter
+        expenseChanges.toExpense = expense
+        expenseChanges.toParty = expense.toParty
+        
+        stack.context.insert(expenseChanges)
+        stack.save()
     }
 }
 

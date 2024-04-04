@@ -20,6 +20,7 @@ extension Payment {
     @NSManaged public var toParty: Party?
     @NSManaged public var payers: NSSet?
     @NSManaged public var enjoyers: NSSet?
+    @NSManaged public var paymentChanges: NSSet?
     
     public var wName: String {
         get {name ?? ""}
@@ -55,8 +56,20 @@ extension Payment {
             }
         }
     }
+    public var paymentChangesArray: [PaymentChanges] {
+        get {let set = paymentChanges as? Set<PaymentChanges> ?? []
+            return set.sorted {
+                $0.when < $1.when}
+        }
+        set {
+                self.paymentChanges = Set<PaymentChanges>() as NSSet
+            
+            for (element) in newValue {
+                self.paymentChanges = NSSet(set: self.paymentChanges!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
 }
-
 extension Payment : Identifiable {
-
 }

@@ -19,6 +19,8 @@ extension Participant {
     @NSManaged public var toParty: Party?
     @NSManaged public var payers: NSSet?
     @NSManaged public var enjoyers: NSSet?
+    @NSManaged public var payersLog: NSSet?
+    @NSManaged public var enjoyersLog: NSSet?
     
     public var wName: String {
         get {name ?? ""}
@@ -50,6 +52,34 @@ extension Participant {
             
             for (element) in newValue {
                 self.enjoyers = NSSet(set: self.enjoyers!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
+    public var payersLogArray: [PayerLog] {
+        get {let set = payersLog as? Set<PayerLog> ?? []
+            return set.sorted {
+                $0.amount < $1.amount}
+        }
+        set {
+                self.payersLog = Set<PayerLog>() as NSSet
+            
+            for (element) in newValue {
+                self.payersLog = NSSet(set: self.payersLog!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
+    public var enjoyersLogArray: [EnjoyerLog] {
+        get {let set = enjoyersLog as? Set<EnjoyerLog> ?? []
+            return set.sorted {
+                $0.amount < $1.amount}
+        }
+        set {
+                self.enjoyersLog = Set<EnjoyerLog>() as NSSet
+            
+            for (element) in newValue {
+                self.enjoyersLog = NSSet(set: self.enjoyersLog!.adding(element))
                 objectWillChange.send()
             }
         }

@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(PaymentChanges)
+public class PaymentChanges: NSManagedObject {
+
+}

@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ExpenseDispayView: View {
+struct ExpenseDisplayView: View {
     
     @ObservedObject var expense: Expense
     

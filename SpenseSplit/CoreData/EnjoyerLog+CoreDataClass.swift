@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(EnjoyerLog)
+public class EnjoyerLog: NSManagedObject {
+
+}

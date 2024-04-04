@@ -20,6 +20,10 @@ extension Party {
     @NSManaged public var participants: NSSet?
     @NSManaged public var expenses: NSSet?
     @NSManaged public var payments: NSSet?
+    @NSManaged public var expenseChanges: NSSet?
+    @NSManaged public var paymentChanges: NSSet?
+    @NSManaged public var expensesLog: NSSet?
+    @NSManaged public var paymentsLog: NSSet?
     
     public var wName: String {
         get {name ?? ""}
@@ -75,8 +79,62 @@ extension Party {
             }
         }
     }
+    public var expenseChangesArray: [ExpenseChanges] {
+        get {let set = expenseChanges as? Set<ExpenseChanges> ?? []
+            return set.sorted {
+                $0.when < $1.when}
+        }
+        set {
+                self.expenseChanges = Set<ExpenseChanges>() as NSSet
+            
+            for (element) in newValue {
+                self.expenseChanges = NSSet(set: self.expenseChanges!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
+    public var paymentChangesArray: [PaymentChanges] {
+        get {let set = paymentChanges as? Set<PaymentChanges> ?? []
+            return set.sorted {
+                $0.when < $1.when}
+        }
+        set {
+                self.paymentChanges = Set<PaymentChanges>() as NSSet
+            
+            for (element) in newValue {
+                self.paymentChanges = NSSet(set: self.paymentChanges!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
+    public var expensesLogArray: [ExpenseLog] {
+        get {let set = expensesLog as? Set<ExpenseLog> ?? []
+            return set.sorted {
+                $0.wName < $1.wName}
+        }
+        set {
+                self.expensesLog = Set<ExpenseLog>() as NSSet
+            
+            for (element) in newValue {
+                self.expensesLog = NSSet(set: self.expensesLog!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
+    public var paymentsLogArray: [PaymentLog] {
+        get {let set = paymentsLog as? Set<PaymentLog> ?? []
+            return set.sorted {
+                $0.wName < $1.wName}
+        }
+        set {
+                self.paymentsLog = Set<PaymentLog>() as NSSet
+            
+            for (element) in newValue {
+                self.paymentsLog = NSSet(set: self.paymentsLog!.adding(element))
+                objectWillChange.send()
+            }
+        }
+    }
 }
-
 extension Party : Identifiable {
-
 }

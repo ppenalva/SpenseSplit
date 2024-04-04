@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-@objc(ChangeHistory)
-public class ChangeHistory: NSManagedObject {
+@objc(ExpenseChanges)
+public class ExpenseChanges: NSManagedObject {
 
 }

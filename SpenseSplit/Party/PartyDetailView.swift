@@ -23,8 +23,11 @@ struct PartyDetailView: View {
     @State private var showShareController = false
     
     @State private var isPresentingNewExpenseView = false
+    @State private var isPresentingDetailExpenseView = false
     @State private var isPresentingNewPaymentView = false
+    @State private var isPresentingDetailPaymentView = false
     @State private var isPresentingSummaryView = false
+    @State private var isPresentingHistoryView = false
     
     @State private var newParticipantName = ""
     
@@ -37,6 +40,9 @@ struct PartyDetailView: View {
     @State var newPaymentAmount = 0.0
     @State var newPaymentPayers: [Payer] = []
     @State var newPaymentEnjoyers: [Enjoyer] = []
+    
+    @State private var expenseSelected: Expense = Expense()
+    @State private var paymentSelected: Payment = Payment()
     
     struct work01 {
         var participant: Participant
@@ -111,14 +117,8 @@ struct PartyDetailView: View {
                     isPresentingNewPaymentView = true
                 }
                 .buttonStyle(BorderlessButtonStyle())
-                Spacer()
-                Button("Summary") {
-                    isPresentingSummaryView = true
-                }
-                .buttonStyle(BorderlessButtonStyle())
             }
             Section(header: Text("Participants")) {
-                
                 ForEach(party.participantsArray) { participant in
                     let c = calculateTotal(participant: participant)
                     HStack {
@@ -127,9 +127,7 @@ struct PartyDetailView: View {
                         Text(String(format: "%.2f",c))
                     }
                     .swipeActions {
-                        
                         Button(role: .none) {
-                            
                             //             Calculo de importes a cobrar
                             //         crear matriz con los importes a cobrar
                             work01s = []
@@ -155,12 +153,9 @@ struct PartyDetailView: View {
                         }
                     }
                     // crear el pago automatico
-                            
                     newPaymentName = "Closing of   \(participant.wName)"
                     newPaymentAmount = c * -1
-                            
                             for newPayer in party.participantsArray {
-                                
                                 let moc1 = party.managedObjectContext
                                 let payerEntity = NSEntityDescription.entity(forEntityName: "Payer", in: stack.context)!
                                 let payer = Payer(entity: payerEntity, insertInto: moc1)
@@ -176,16 +171,12 @@ struct PartyDetailView: View {
                                     newPaymentPayers.append(payer)
                                 }
                             }
-                            
                             for newEnjoyer in party.participantsArray {
-                                
                                 var found = false
-                                
                                 let moc1 = party.managedObjectContext
                                 let enjoyerEntity = NSEntityDescription.entity(forEntityName: "Enjoyer", in: stack.context)!
                                 let enjoyer = Enjoyer(entity: enjoyerEntity, insertInto: moc1)
                                 enjoyer.toParticipant = newEnjoyer
-                                
                                 for entry in work02s {
                                     if (newEnjoyer == entry.participant)
                                     {
@@ -219,7 +210,6 @@ struct PartyDetailView: View {
                     .tint(.red)
                     }
                 }
-                .onDelete (perform: deleteParticipant)
                 HStack {
                     TextField("New Participant", text: $newParticipantName)
                     Button(action: {
@@ -238,25 +228,166 @@ struct PartyDetailView: View {
                     .disabled(newParticipantName.isEmpty)
                 }
             }
+        HStack {
+            Button("Summary") {
+                isPresentingSummaryView = true
+            }
+            .buttonStyle(BorderlessButtonStyle())
+            Spacer()
+            Button("History") {
+                isPresentingHistoryView = true
+            }
+            .buttonStyle(BorderlessButtonStyle())
+        }
             Section(header: Text("Expenses")) {
                 ForEach(party.expensesArray) { expense in
-                    NavigationLink(destination: ExpenseDetailView(expense: expense, theId: $theId)) {
+                    NavigationLink(destination: ExpenseDisplayView(expense: expense)) {
                         HStack {
                             Label(expense.wName, systemImage: "r.circle")
                         }
-                    }
-                }
-                .onDelete(perform: deleteExpenses)
-            }
-            Section(header: Text("Payements")) {
-                ForEach(party.paymentsArray) { payment in
-                    NavigationLink(destination: PaymentDetailView(payment: payment, theId: $theId)) {
-                        HStack {
-                            Label(payment.wName, systemImage: "r.circle")
+                        .swipeActions {
+                            Button(role: .none) {
+                                    expenseSelected = expense
+                                    isPresentingDetailExpenseView = true
+                            }
+                        label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                            Button(role: .destructive ) {
+                                withAnimation {
+                                    
+                                    let moc1 = party.managedObjectContext
+                                    let expenseLogEntity = NSEntityDescription.entity(forEntityName: "ExpenseLog", in: stack.context)!
+                                    let payerLogEntity = NSEntityDescription.entity(forEntityName: "PayerLog", in: stack.context)!
+                                    let enjoyerLogEntity = NSEntityDescription.entity(forEntityName: "EnjoyerLog", in: stack.context)!
+                                    
+                                    let expenseBefore = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+                                    expenseBefore.wName = expense.wName
+                                    expenseBefore.amount = expense.amount
+                                    for payer in expense.payersArray {
+                                        let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+                                        payerLog.bandera = payer.bandera
+                                        payerLog.amount = payer.amount
+                                        payerLog.toParticipant = payer.toParticipant
+                                        payerLog.toExpenseLog = expenseBefore
+                                        stack.context.insert(payerLog)
+                                        expenseBefore.payersLogArray.append(payerLog)
+                                    }
+                                    for enjoyer in expense.enjoyersArray {
+                                        let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+                                        enjoyerLog.bandera = enjoyer.bandera
+                                        enjoyerLog.amount = enjoyer.amount
+                                        enjoyerLog.toParticipant = enjoyer.toParticipant
+                                        enjoyerLog.toExpenseLog = expenseBefore
+                                        stack.context.insert(enjoyerLog)
+                                        expenseBefore.enjoyersLogArray.append(enjoyerLog)
+                                    }
+                                    expenseBefore.toParty = expense.toParty
+                                    stack.context.insert(expenseBefore)
+                                    
+                                    let expenseAfter = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+                                    expenseAfter.wName = "Delete"
+                                    expenseAfter.amount = 0.0
+                                    expenseAfter.toParty = party
+                                    stack.context.insert(expenseAfter)
+                                    
+                                    let expenseChangesEntity = NSEntityDescription.entity(forEntityName: "ExpenseChanges", in: stack.context)!
+                                    let expenseChanges = ExpenseChanges(entity: expenseChangesEntity, insertInto: moc1)
+                                    
+                                    expenseChanges.when = Date()
+                                    expenseChanges.before = expenseBefore
+                                    expenseChanges.after = expenseAfter
+                                    expenseChanges.toExpense = expense
+                                    expenseChanges.toParty = expense.toParty
+                                    stack.context.insert(expenseChanges)
+                                    
+                                    stack.context.delete(expense)
+                                    stack.save()
+                                }
+                            }
+                        label: {
+                            Label("Del", systemImage: "trash")
+                        }
+                        .tint(.red)
                         }
                     }
                 }
-                .onDelete(perform: deletePayments)
+            }
+            Section(header: Text("Payements")) {
+                ForEach(party.paymentsArray) { payment in
+                    NavigationLink(destination: PaymentDisplayView(payment: payment)) {
+                        HStack {
+                            Label(payment.wName, systemImage: "r.circle")
+                        }
+                        .swipeActions {
+                            Button(role: .none) {
+                                    paymentSelected = payment
+                                    isPresentingDetailPaymentView = true
+                            }
+                        label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.blue)
+                            Button(role: .destructive ) {
+                                withAnimation {
+                                    
+                                    let moc1 = party.managedObjectContext
+                                    let paymentLogEntity = NSEntityDescription.entity(forEntityName: "PaymentLog", in: stack.context)!
+                                    let payerLogEntity = NSEntityDescription.entity(forEntityName: "PayerLog", in: stack.context)!
+                                    let enjoyerLogEntity = NSEntityDescription.entity(forEntityName: "EnjoyerLog", in: stack.context)!
+                                    
+                                    let paymentBefore = PaymentLog(entity: paymentLogEntity, insertInto: moc1)
+                                    paymentBefore.wName = payment.wName
+                                    paymentBefore.amount = payment.amount
+                                    for payer in payment.payersArray {
+                                        let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+                                        payerLog.bandera = payer.bandera
+                                        payerLog.amount = payer.amount
+                                        payerLog.toParticipant = payer.toParticipant
+                                        payerLog.toPaymentLog = paymentBefore
+                                        stack.context.insert(payerLog)
+                                        paymentBefore.payersLogArray.append(payerLog)
+                                    }
+                                    for enjoyer in payment.enjoyersArray {
+                                        let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+                                        enjoyerLog.bandera = enjoyer.bandera
+                                        enjoyerLog.amount = enjoyer.amount
+                                        enjoyerLog.toParticipant = enjoyer.toParticipant
+                                        enjoyerLog.toPaymentLog = paymentBefore
+                                        stack.context.insert(enjoyerLog)
+                                        paymentBefore.enjoyersLogArray.append(enjoyerLog)
+                                    }
+                                    paymentBefore.toParty = payment.toParty
+                                    stack.context.insert(paymentBefore)
+                                    
+                                    let paymentAfter = PaymentLog(entity: paymentLogEntity, insertInto: moc1)
+                                    paymentAfter.wName = "Delete"
+                                    paymentAfter.amount = 0.0
+                                    paymentAfter.toParty = party
+                                    stack.context.insert(paymentAfter)
+                                    
+                                    let paymentChangesEntity = NSEntityDescription.entity(forEntityName: "PaymentChanges", in: stack.context)!
+                                    let paymentChanges = PaymentChanges(entity: paymentChangesEntity, insertInto: moc1)
+                                    
+                                    paymentChanges.when = Date()
+                                    paymentChanges.before = paymentBefore
+                                    paymentChanges.after = paymentAfter
+                                    paymentChanges.toPayment = payment
+                                    paymentChanges.toParty = payment.toParty
+                                    stack.context.insert(paymentChanges)
+                                   
+                                    stack.context.delete(payment)
+                                    stack.save()
+                                }
+                            }
+                        label: {
+                            Label("Del", systemImage: "trash")
+                        }
+                        .tint(.red)
+                        }
+                    }
+                }
             }
         }
         .id(theId)
@@ -322,6 +453,51 @@ struct PartyDetailView: View {
                                     expense.enjoyersArray.append(newEnjoyer)
                                 }
                                 stack.context.insert(expense)
+                                
+                                let expenseLogEntity = NSEntityDescription.entity(forEntityName: "ExpenseLog", in: stack.context)!
+                                let payerLogEntity = NSEntityDescription.entity(forEntityName: "PayerLog", in: stack.context)!
+                                let enjoyerLogEntity = NSEntityDescription.entity(forEntityName: "EnjoyerLog", in: stack.context)!
+                                
+                                let expenseBefore = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+                                expenseBefore.wName = "Creation"
+                                expenseBefore.amount = 0.0
+                                expenseBefore.toParty = party
+                                stack.context.insert(expenseBefore)
+                                
+                                let expenseAfter = ExpenseLog(entity: expenseLogEntity, insertInto: moc1)
+                                expenseAfter.wName = expense.wName
+                                expenseAfter.amount = expense.amount
+                                for payer in expense.payersArray {
+                                    let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+                                    payerLog.bandera = payer.bandera
+                                    payerLog.amount = payer.amount
+                                    payerLog.toParticipant = payer.toParticipant
+                                    payerLog.toExpenseLog = expenseAfter
+                                    stack.context.insert(payerLog)
+                                    expenseAfter.payersLogArray.append(payerLog)
+                                }
+                                for enjoyer in expense.enjoyersArray {
+                                    let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+                                    enjoyerLog.bandera = enjoyer.bandera
+                                    enjoyerLog.amount = enjoyer.amount
+                                    enjoyerLog.toParticipant = enjoyer.toParticipant
+                                    enjoyerLog.toExpenseLog = expenseAfter
+                                    stack.context.insert(enjoyerLog)
+                                    expenseAfter.enjoyersLogArray.append(enjoyerLog)
+                                }
+                                expenseAfter.toParty = expense.toParty
+                                stack.context.insert(expenseAfter)
+                                
+                                let expenseChangesEntity = NSEntityDescription.entity(forEntityName: "ExpenseChanges", in: stack.context)!
+                                let expenseChanges = ExpenseChanges(entity: expenseChangesEntity, insertInto: moc1)
+                                
+                                expenseChanges.when = Date()
+                                expenseChanges.before = expenseBefore
+                                expenseChanges.after = expenseAfter
+                                expenseChanges.toExpense = expense
+                                expenseChanges.toParty = expense.toParty
+                                stack.context.insert(expenseChanges)
+                                
                                 stack.save()
                                 isPresentingNewExpenseView = false
                                 newExpenseName = ""
@@ -362,6 +538,51 @@ struct PartyDetailView: View {
                                     payment.enjoyersArray.append(newEnjoyer)
                                 }
                                 stack.context.insert(payment)
+                                
+                                let paymentLogEntity = NSEntityDescription.entity(forEntityName: "PaymentLog", in: stack.context)!
+                                let payerLogEntity = NSEntityDescription.entity(forEntityName: "PayerLog", in: stack.context)!
+                                let enjoyerLogEntity = NSEntityDescription.entity(forEntityName: "EnjoyerLog", in: stack.context)!
+                                
+                                let paymentBefore = PaymentLog(entity: paymentLogEntity, insertInto: moc1)
+                                paymentBefore.wName = "Creation"
+                                paymentBefore.amount = 0.0
+                                paymentBefore.toParty = party
+                                stack.context.insert(paymentBefore)
+                                
+                                let paymentAfter = PaymentLog(entity: paymentLogEntity, insertInto: moc1)
+                                paymentAfter.wName = payment.wName
+                                paymentAfter.amount = payment.amount
+                                for payer in payment.payersArray {
+                                    let payerLog = PayerLog(entity: payerLogEntity, insertInto: moc1)
+                                    payerLog.bandera = payer.bandera
+                                    payerLog.amount = payer.amount
+                                    payerLog.toParticipant = payer.toParticipant
+                                    payerLog.toPaymentLog = paymentAfter
+                                    stack.context.insert(payerLog)
+                                    paymentAfter.payersLogArray.append(payerLog)
+                                }
+                                for enjoyer in payment.enjoyersArray {
+                                    let enjoyerLog = EnjoyerLog(entity: enjoyerLogEntity, insertInto: moc1)
+                                    enjoyerLog.bandera = enjoyer.bandera
+                                    enjoyerLog.amount = enjoyer.amount
+                                    enjoyerLog.toParticipant = enjoyer.toParticipant
+                                    enjoyerLog.toPaymentLog = paymentAfter
+                                    stack.context.insert(enjoyerLog)
+                                    paymentAfter.enjoyersLogArray.append(enjoyerLog)
+                                }
+                                paymentAfter.toParty = payment.toParty
+                                stack.context.insert(paymentAfter)
+                                
+                                let paymentChangesEntity = NSEntityDescription.entity(forEntityName: "PaymentChanges", in: stack.context)!
+                                let paymentChanges = PaymentChanges(entity: paymentChangesEntity, insertInto: moc1)
+                                
+                                paymentChanges.when = Date()
+                                paymentChanges.before = paymentBefore
+                                paymentChanges.after = paymentAfter
+                                paymentChanges.toPayment = payment
+                                paymentChanges.toParty = payment.toParty
+                                stack.context.insert(paymentChanges)
+                      
                                 stack.save()
                                 isPresentingNewPaymentView = false
                                 newPaymentName = ""
@@ -384,6 +605,29 @@ struct PartyDetailView: View {
                             }
                         }
                     }
+            }
+        }
+        .sheet(isPresented: $isPresentingHistoryView) {
+            NavigationView {
+                HistoryView(party: party)
+                    .navigationTitle("History")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Back") {
+                                isPresentingHistoryView = false
+                            }
+                        }
+                    }
+            }
+        }
+        .sheet(isPresented: $isPresentingDetailExpenseView) {
+            NavigationView {
+                ExpenseDetailView(expense: $expenseSelected, theId: $theId)
+            }
+        }
+        .sheet(isPresented: $isPresentingDetailPaymentView) {
+            NavigationView {
+                PaymentDetailView(payment: $paymentSelected, theId: $theId)
             }
         }
     }
