@@ -16,7 +16,7 @@ extension ExpenseChanges {
     }
 
     @NSManaged public var who: String?
-    @NSManaged public var when: Date
+    @NSManaged public var when: Date?
     @NSManaged public var before: ExpenseLog?
     @NSManaged public var after: ExpenseLog?
     @NSManaged public var toParty: Party?

@@ -16,7 +16,7 @@ extension PaymentChanges {
     }
 
     @NSManaged public var who: String?
-    @NSManaged public var when: Date
+    @NSManaged public var when: Date?
     @NSManaged public var before: PaymentLog?
     @NSManaged public var after: PaymentLog?
     @NSManaged public var toParty: Party?

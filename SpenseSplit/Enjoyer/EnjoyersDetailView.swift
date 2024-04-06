@@ -10,8 +10,11 @@ import SwiftUI
 struct EnjoyersDetailView: View {
     
     @ObservedObject var expense: Expense
-    
-    @State private var flag: Int = 0
+    @Binding var validPayer: Bool
+    @Binding var validEnjoyer: Bool
+    @Binding var validExpense: Bool
+    @Binding var validPayment: Bool
+    @Binding var theId: Int
     
     var body: some View {
         List {
@@ -22,38 +25,55 @@ struct EnjoyersDetailView: View {
             }
             ForEach($expense.enjoyersArray) { $enjoyer in
                 HStack {
-                    Toggle("",isOn: $enjoyer.bandera)
-                        .onTapGesture {
-                            modificarAmount(enjoyer: enjoyer)
-                        }
+                    Toggle("",isOn: $enjoyer.bandera.onChange({value in modificarAmount(enjoyer: enjoyer)}))
                     Spacer()
                     Text(enjoyer.toParticipant!.wName)
                     Spacer()
-                    TextField("Amount", value: $enjoyer.amount, format: .number)
+                    TextField("Amount", value: $enjoyer.amount.onChange({value in validateEnjoyer()}), format: .number)
                 }
             }
         }
-        Text("\(flag)")
+        .id(theId)
     }
     func modificarAmount(enjoyer: Enjoyer ) {
         var counter = 0
-        flag += 1
-        if (enjoyer.bandera) {
-            counter -= 1
-        } else {
-            counter += 1
-        }
+        theId += 1
         for enjoyer1 in expense.enjoyersArray {
             if (enjoyer1.bandera) {
                 counter += 1
             }
         }
-        for enjoyer2 in expense.enjoyersArray {
-            if ((enjoyer2 == enjoyer && !enjoyer2.bandera && counter != 0) || (enjoyer2 != enjoyer &&  enjoyer2.bandera && counter != 0)) {
-                enjoyer2.amount = expense.amount/Double(counter)
-            } else {
+        if counter != 0 {
+            for enjoyer2 in expense.enjoyersArray {
+                if (enjoyer2.bandera) {
+                    enjoyer2.amount = expense.amount/Double(counter)
+                } else {
+                    enjoyer2.amount = 0.0
+                }
+            }
+        } else {
+            for enjoyer2 in expense.enjoyersArray {
                 enjoyer2.amount = 0.0
             }
         }
+        validateEnjoyer()
     }
-}
+        func validateEnjoyer() {
+            validPayer = true
+            var total = 0.0
+            for newExpenseEnjoyer in expense.enjoyersArray {
+                    total += newExpenseEnjoyer.amount
+            }
+            if total == expense.amount {
+                validEnjoyer = true
+            } else {
+                validEnjoyer = false
+            }
+            if (validPayer && validEnjoyer) {
+                validExpense = true
+            } else {
+                validExpense = false
+            }
+        }
+    }
+

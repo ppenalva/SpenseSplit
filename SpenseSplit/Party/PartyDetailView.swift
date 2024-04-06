@@ -53,6 +53,12 @@ struct PartyDetailView: View {
     
     @State var theId = 0
     
+    @State var validExpense = false
+    @State var validPayment = false
+    
+    @State var firstCallExpense = false
+    @State var firstCallPayment = false
+    
     init(party: Party) {
         self.party = party
         _participants = FetchRequest(entity: Participant.entity(),
@@ -94,6 +100,7 @@ struct PartyDetailView: View {
                         newExpenseEnjoyers.append(enjoyer)
                     }
                     isPresentingNewExpenseView = true
+                    validExpense = false
                 }
                 .buttonStyle(BorderlessButtonStyle())
                 Spacer()
@@ -115,6 +122,7 @@ struct PartyDetailView: View {
                         newPaymentEnjoyers.append(enjoyer)
                     }
                     isPresentingNewPaymentView = true
+                    validPayment = false
                 }
                 .buttonStyle(BorderlessButtonStyle())
             }
@@ -221,6 +229,7 @@ struct PartyDetailView: View {
                             participant.name = newParticipantName
                             stack.context.insert(participant)
                             newParticipantName = ""
+                            stack.save()
                         }
                     }) {
                         Image(systemName: "plus.circle.fill")
@@ -248,7 +257,9 @@ struct PartyDetailView: View {
                         .swipeActions {
                             Button(role: .none) {
                                     expenseSelected = expense
+                                firstCallExpense = true
                                     isPresentingDetailExpenseView = true
+                                validExpense = false
                             }
                         label: {
                             Label("Edit", systemImage: "pencil")
@@ -323,7 +334,9 @@ struct PartyDetailView: View {
                         .swipeActions {
                             Button(role: .none) {
                                     paymentSelected = payment
+                                firstCallPayment = true
                                     isPresentingDetailPaymentView = true
+                                validPayment = false
                             }
                         label: {
                             Label("Edit", systemImage: "pencil")
@@ -426,7 +439,7 @@ struct PartyDetailView: View {
             stack.save()})
         .sheet(isPresented: $isPresentingNewExpenseView) {
             NavigationView {
-                ExpenseNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount, newExpensePayers: $newExpensePayers, newExpenseEnjoyers: $newExpenseEnjoyers)
+                ExpenseNewView(newExpenseName: $newExpenseName, newExpenseAmount: $newExpenseAmount, newExpensePayers: $newExpensePayers, newExpenseEnjoyers: $newExpenseEnjoyers, validExpense: $validExpense, validPayment: $validPayment)
                     .navigationTitle("Expenses")
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
@@ -436,6 +449,8 @@ struct PartyDetailView: View {
                                 newExpenseAmount = 0.0
                                 newExpensePayers = []
                                 newExpenseEnjoyers = []
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
@@ -505,13 +520,14 @@ struct PartyDetailView: View {
                                 newExpensePayers = []
                                 newExpenseEnjoyers = []
                             }
+                            .disabled(!validExpense)
                         }
                     }
             }
         }
         .sheet(isPresented: $isPresentingNewPaymentView) {
             NavigationView {
-                PaymentNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount, newPaymentPayers: $newPaymentPayers, newPaymentEnjoyers: $newPaymentEnjoyers)
+                PaymentNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount, newPaymentPayers: $newPaymentPayers, newPaymentEnjoyers: $newPaymentEnjoyers, validExpense: $validExpense, validPayment: $validPayment)
                     .navigationTitle("Payments")
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
@@ -521,6 +537,8 @@ struct PartyDetailView: View {
                                 newPaymentAmount = 0.0
                                 newPaymentPayers = []
                                 newPaymentEnjoyers = []
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
@@ -590,6 +608,7 @@ struct PartyDetailView: View {
                                 newPaymentPayers = []
                                 newPaymentEnjoyers = []
                             }
+                            .disabled(!validPayment)
                         }
                     }
             }
@@ -622,12 +641,12 @@ struct PartyDetailView: View {
         }
         .sheet(isPresented: $isPresentingDetailExpenseView) {
             NavigationView {
-                ExpenseDetailView(expense: $expenseSelected, theId: $theId)
+                ExpenseDetailView(expense: $expenseSelected, theId: $theId, validExpense: $validExpense, validPayment: $validPayment, firstCallExpense: $firstCallExpense)
             }
         }
         .sheet(isPresented: $isPresentingDetailPaymentView) {
             NavigationView {
-                PaymentDetailView(payment: $paymentSelected, theId: $theId)
+                PaymentDetailView(payment: $paymentSelected, theId: $theId, validExpense: $validExpense, validPayment: $validPayment, firstCallPayment: $firstCallPayment)
             }
         }
     }

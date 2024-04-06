@@ -13,6 +13,9 @@ struct PaymentDetailView: View {
     
     @Binding var payment: Payment
     @Binding var theId: Int
+    @Binding var validExpense: Bool
+    @Binding var validPayment: Bool
+    @Binding var firstCallPayment: Bool
     
     private let stack = CoreDataStack.shared
     
@@ -40,6 +43,9 @@ struct PaymentDetailView: View {
         Text(payment.toParty!.wName)
     }
     }
+    
+    @State var validPayer = false
+    @State var validEnjoyer = false
     
     var body: some View {
         List {
@@ -87,51 +93,62 @@ struct PaymentDetailView: View {
         .navigationBarItems(leading: btnBack)
         .sheet(isPresented: $isPresentingDetailSendersView) {
             NavigationView {
-                SendersDetailView(payment: payment)
+                SendersDetailView(payment: payment, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Dismiss") {
                                 isPresentingDetailSendersView = false
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Add") {
                                 isPresentingDetailSendersView = false
+                                stack.save()
                             }
+                            .disabled(!validPayer)
                         }
                     }
             }
         }
         .sheet(isPresented: $isPresentingDetailReceiversView) {
             NavigationView {
-                ReceiversDetailView(payment: payment)
+                ReceiversDetailView(payment: payment, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Dismiss") {
                                 isPresentingDetailReceiversView = false
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Add") {
                                 isPresentingDetailReceiversView = false
+                                stack.save()
                             }
+                            .disabled(!validEnjoyer)
                         }
                     }
             }
         }
         .onAppear(perform: keepInitial)
+        .id(theId)
     }
     func keepInitial() {
-
-        paymentBeforeName = payment.wName
-        paymentBeforeAmount = payment.amount
-        for payer in payment.payersArray {
-            let a = PayerEnjoyer(bandera: payer.bandera, amount: payer.amount, toParticipant: payer.toParticipant!)
-            paymentBeforePayers.append(a)
-        }
-        for enjoyer in payment.enjoyersArray {
-            let a = PayerEnjoyer(bandera: enjoyer.bandera, amount: enjoyer.amount, toParticipant: enjoyer.toParticipant!)
-            paymentBeforeEnjoyers.append(a)
+        if firstCallPayment {
+            paymentBeforeName = payment.wName
+            paymentBeforeAmount = payment.amount
+            for payer in payment.payersArray {
+                let a = PayerEnjoyer(bandera: payer.bandera, amount: payer.amount, toParticipant: payer.toParticipant!)
+                paymentBeforePayers.append(a)
+            }
+            for enjoyer in payment.enjoyersArray {
+                let a = PayerEnjoyer(bandera: enjoyer.bandera, amount: enjoyer.amount, toParticipant: enjoyer.toParticipant!)
+                paymentBeforeEnjoyers.append(a)
+            }
+            firstCallPayment = false
         }
     }
     func createHistory() {

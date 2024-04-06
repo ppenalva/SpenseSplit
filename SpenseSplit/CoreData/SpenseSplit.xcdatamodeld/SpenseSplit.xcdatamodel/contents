@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23E224" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="Enjoyer" representedClassName="Enjoyer" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -59,7 +59,7 @@
         <relationship name="paymentsLog" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PaymentLog" inverseName="toParty" inverseEntity="PaymentLog"/>
     </entity>
     <entity name="Payer" representedClassName="Payer" syncable="YES">
-        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="bandera" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="toExpense" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="payers" inverseEntity="Expense"/>
         <relationship name="toParticipant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="payers" inverseEntity="Participant"/>

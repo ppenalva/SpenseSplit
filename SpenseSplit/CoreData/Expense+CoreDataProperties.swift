@@ -59,7 +59,7 @@ extension Expense {
     public var expenseChangesArray: [ExpenseChanges] {
         get {let set = expenseChanges as? Set<ExpenseChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.expenseChanges = Set<ExpenseChanges>() as NSSet

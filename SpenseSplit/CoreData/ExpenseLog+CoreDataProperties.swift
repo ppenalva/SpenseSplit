@@ -60,7 +60,7 @@ extension ExpenseLog {
     public var beforesArray: [ExpenseChanges] {
         get {let set = befores as? Set<ExpenseChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.befores = Set<ExpenseChanges>() as NSSet
@@ -74,7 +74,7 @@ extension ExpenseLog {
     public var aftersArray: [ExpenseChanges] {
         get {let set = afters as? Set<ExpenseChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.afters = Set<ExpenseChanges>() as NSSet

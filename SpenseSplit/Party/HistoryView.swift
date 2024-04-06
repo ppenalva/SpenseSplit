@@ -22,8 +22,8 @@ struct HistoryView: View {
                         Text("Expenses")) {
                 ForEach(party.expenseChangesArray) { expenseChange in
                     HStack {
-                        Text(expenseChange.when, style:  .date)
-                        Text(expenseChange.when, style:  .time)
+                        Text(expenseChange.when!, style:  .date)
+                        Text(expenseChange.when!, style:  .time)
                     }
                     Text("Before")
                     HStack {
@@ -87,8 +87,8 @@ struct HistoryView: View {
                         Text("Payments")) {
                 ForEach(party.paymentChangesArray) { paymentChange in
                     HStack {
-                        Text(paymentChange.when, style:  .date)
-                        Text(paymentChange.when, style:  .time)
+                        Text(paymentChange.when!, style:  .date)
+                        Text(paymentChange.when!, style:  .time)
                     }
                     Text("Before")
                     HStack {

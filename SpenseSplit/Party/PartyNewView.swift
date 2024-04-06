@@ -23,32 +23,6 @@ struct PartyNewView: View {
                 TextField("Name", text: $party.wName)
                 ThemePicker(selection: $party.wTheme)
             }
-//            Section(header: Text("Participants")) {
-//                ForEach( party.participantsArray ) { participant in
-//                    HStack {
-//                        Text(participant.wName)
-//                    }
-//                }
-//                .onDelete (perform: deleteParticipant)
-//                HStack {
-//                    TextField("New Participant", text: $newParticipantName)
-//                    Button(action: {
-//                        withAnimation {
-//                            let moc1 = party.managedObjectContext
-//                            let participantEntity = NSEntityDescription.entity(forEntityName: "Participant", in: stack.context)!
-//                            let newParticipant = Participant(entity: participantEntity, insertInto: moc1)
-//                            newParticipant.wName = newParticipantName
-//                            newParticipant.toParty = party
-//                            party.participantsArray.append(newParticipant)
-//                            stack.context.insert(newParticipant)
-//                            newParticipantName = ""
-//                        }
-//                    }) {
-//                        Image(systemName: "plus.circle.fill")
-//                    }
-//                    .disabled(newParticipantName.isEmpty)
-//                }
-//            }
         }
     }
     func deleteParticipant( at offsets: IndexSet) {

@@ -60,7 +60,7 @@ extension PaymentLog {
     public var beforesArray: [PaymentChanges] {
         get {let set = befores as? Set<PaymentChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.befores = Set<PaymentChanges>() as NSSet
@@ -74,7 +74,7 @@ extension PaymentLog {
     public var aftersArray: [PaymentChanges] {
         get {let set = afters as? Set<PaymentChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.afters = Set<PaymentChanges>() as NSSet

@@ -82,7 +82,7 @@ extension Party {
     public var expenseChangesArray: [ExpenseChanges] {
         get {let set = expenseChanges as? Set<ExpenseChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.expenseChanges = Set<ExpenseChanges>() as NSSet
@@ -96,7 +96,7 @@ extension Party {
     public var paymentChangesArray: [PaymentChanges] {
         get {let set = paymentChanges as? Set<PaymentChanges> ?? []
             return set.sorted {
-                $0.when < $1.when}
+                $0.when! < $1.when!}
         }
         set {
                 self.paymentChanges = Set<PaymentChanges>() as NSSet

@@ -10,8 +10,11 @@ import SwiftUI
 struct SendersDetailView: View {
     
     @ObservedObject var payment: Payment
-    
-    @State private var flag: Int = 0
+    @Binding var validPayer: Bool
+    @Binding var validEnjoyer: Bool
+    @Binding var validExpense: Bool
+    @Binding var validPayment: Bool
+    @Binding var theId: Int
     
     var body: some View {
         List {
@@ -22,38 +25,54 @@ struct SendersDetailView: View {
             }
             ForEach($payment.payersArray) { $payer in
                 HStack {
-                    Toggle("",isOn: $payer.bandera)
-                        .onTapGesture {
-                            modificarAmount(payer: payer)
-                        }
+                    Toggle("",isOn: $payer.bandera.onChange({value in modificarAmount(payer: payer)}))
                     Spacer()
                     Text(payer.toParticipant!.wName)
                     Spacer()
-                    TextField("Amount", value: $payer.amount, format: .number)
+                    TextField("Amount", value: $payer.amount.onChange({value in validatePayer()}), format: .number)
                 }
             }
         }
-        Text("\(flag)")
+        .id(theId)
     }
     func modificarAmount(payer: Payer ) {
         var counter = 0
-        flag += 1
-        if (payer.bandera) {
-            counter -= 1
-        } else {
-            counter += 1
-        }
+        theId += 1
         for payer1 in payment.payersArray {
             if (payer1.bandera) {
                 counter += 1
             }
         }
-        for payer2 in payment.payersArray {
-            if ((payer2 == payer && !payer2.bandera && counter != 0) || (payer2 != payer &&  payer2.bandera && counter != 0)) {
-                payer2.amount = payment.amount/Double(counter)
-            } else {
+        if counter != 0 {
+            for payer2 in payment.payersArray {
+                if (payer2.bandera) {
+                    payer2.amount = payment.amount/Double(counter)
+                } else {
+                    payer2.amount = 0.0
+                }
+            }
+        } else {
+            for payer2 in payment.payersArray {
                 payer2.amount = 0.0
             }
+        }
+        validatePayer()
+    }
+    func validatePayer() {
+        validEnjoyer = true
+        var total = 0.0
+        for newPaymentPayer in payment.payersArray {
+                total += newPaymentPayer.amount
+        }
+        if total == payment.amount {
+            validPayer = true
+        } else {
+            validPayer = false
+        }
+        if (validPayer && validEnjoyer) {
+            validExpense = true
+        } else {
+            validExpense = false
         }
     }
 }

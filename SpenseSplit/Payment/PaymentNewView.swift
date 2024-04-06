@@ -13,7 +13,11 @@ struct PaymentNewView: View {
     @Binding var newPaymentAmount: Double
     @Binding var newPaymentPayers: [Payer]
     @Binding var newPaymentEnjoyers: [Enjoyer]
+    @Binding var validExpense: Bool
+    @Binding var validPayment: Bool
     
+    @State var theId: Int = 0
+   
     private let stack = CoreDataStack.shared
     
     @State private var isPresentingNewSendersView = false
@@ -21,6 +25,9 @@ struct PaymentNewView: View {
     
     @State private var contadorSenders = 0
     @State private var contadorReceivers = 0
+    
+    @State var validPayer = false
+    @State var validEnjoyer = false
     
     var body: some View {
         List {
@@ -30,20 +37,22 @@ struct PaymentNewView: View {
             }
             HStack {
                 HStack{
-                Button ("Senders") {
-                    
-                    isPresentingNewSendersView = true
-                }
-                .buttonStyle(BorderlessButtonStyle())
+                    Button ("Senders") {
+                        
+                        isPresentingNewSendersView = true
+                        validPayer = false
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
                     Text(contadorSenders, format: .number)
                 }
                 Spacer()
                 HStack{
-                Button ("Receivers") {
-                    
-                    isPresentingNewReceiversView = true
-                }
-                .buttonStyle(BorderlessButtonStyle())
+                    Button ("Receivers") {
+                        
+                        isPresentingNewReceiversView = true
+                        validEnjoyer = false
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
                     Text(contadorReceivers, format: .number)
                 }
             }
@@ -70,58 +79,69 @@ struct PaymentNewView: View {
                 }
             }
         }
-            .sheet(isPresented: $isPresentingNewSendersView) {
-                NavigationView {
-                    SendersNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentPayers: $newPaymentPayers)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    for payer in newPaymentPayers {
-                                        payer.bandera = false
-                                    }
-                                    isPresentingNewSendersView = false
+      
+        .sheet(isPresented: $isPresentingNewSendersView) {
+            NavigationView {
+                SendersNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentPayers: $newPaymentPayers, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Reset") {
+                                for payer in newPaymentPayers {
+                                    payer.bandera = false
+                                    payer.amount = 0.0
                                 }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    contadorSenders = 0
-                                    for payer in newPaymentPayers {
-                                        if (payer.bandera) {
-                                            contadorSenders += 1
-                                        }
-                                    }
-                                    isPresentingNewSendersView = false
-                                }
+                                contadorSenders = 0
+                                isPresentingNewSendersView = false
+                                theId += 1
                             }
                         }
-                }
-            }
-            .sheet(isPresented: $isPresentingNewReceiversView) {
-                NavigationView {
-                    ReceiversNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentEnjoyers: $newPaymentEnjoyers)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    for enjoyer in newPaymentEnjoyers {
-                                        enjoyer.bandera = false
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Confirm") {
+                                contadorSenders = 0
+                                for payer in newPaymentPayers {
+                                    if (payer.bandera) {
+                                        contadorSenders += 1
                                     }
-                                    isPresentingNewReceiversView = false
                                 }
+                                isPresentingNewSendersView = false
+                                theId += 1
                             }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    contadorReceivers = 0
-                                    for enjoyer in newPaymentEnjoyers {
-                                        if (enjoyer.bandera) {
-                                            contadorReceivers += 1
-                                        }
-                                    }
-                                    isPresentingNewReceiversView = false
-                                }
-                            }
+                            .disabled(!validPayer)
                         }
-                }
+                    }
             }
         }
+        .sheet(isPresented: $isPresentingNewReceiversView) {
+            NavigationView {
+                ReceiversNewView(newPaymentName: $newPaymentName, newPaymentAmount: $newPaymentAmount,newPaymentEnjoyers: $newPaymentEnjoyers, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Reset") {
+                                for enjoyer in newPaymentEnjoyers {
+                                    enjoyer.bandera = false
+                                    enjoyer.amount = 0.0
+                                }
+                                contadorReceivers = 0
+                                isPresentingNewReceiversView = false
+                                theId += 1
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Confirm") {
+                                contadorReceivers = 0
+                                for enjoyer in newPaymentEnjoyers {
+                                    if (enjoyer.bandera) {
+                                        contadorReceivers += 1
+                                    }
+                                }
+                                isPresentingNewReceiversView = false
+                                theId += 1
+                            }
+                            .disabled(!validEnjoyer)
+                        }
+                    }
+            }
+        }
+        .id(theId)
     }
-
+}

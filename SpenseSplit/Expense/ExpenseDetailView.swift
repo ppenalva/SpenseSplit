@@ -12,6 +12,9 @@ struct ExpenseDetailView: View {
     
     @Binding var expense: Expense
     @Binding var theId: Int
+    @Binding var validExpense: Bool
+    @Binding var validPayment: Bool
+    @Binding var firstCallExpense: Bool
     
     private let stack = CoreDataStack.shared
     
@@ -38,7 +41,11 @@ struct ExpenseDetailView: View {
     }) {
         Text(expense.toParty!.wName)
     }
+    .disabled(!validExpense)
     }
+    
+    @State var validPayer = false
+    @State var validEnjoyer = false
     
     var body: some View {
         List {
@@ -84,51 +91,62 @@ struct ExpenseDetailView: View {
         .navigationBarItems(leading: btnBack)
         .sheet(isPresented: $isPresentingDetailPayersView) {
             NavigationView {
-                PayersDetailView(expense: expense)
+                PayersDetailView(expense: expense, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Dismiss") {
                                 isPresentingDetailPayersView = false
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Add") {
                                 isPresentingDetailPayersView = false
+                                stack.save()
                             }
+                            .disabled(!validPayer)
                         }
                     }
             }
         }
         .sheet(isPresented: $isPresentingDetailEnjoyersView) {
             NavigationView {
-                EnjoyersDetailView(expense: expense)
+                EnjoyersDetailView(expense: expense, validPayer: $validPayer, validEnjoyer: $validEnjoyer, validExpense: $validExpense, validPayment: $validPayment, theId: $theId)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Dismiss") {
                                 isPresentingDetailEnjoyersView = false
+                                stack.context.rollback()
+                                theId += 1
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Add") {
                                 isPresentingDetailEnjoyersView = false
+                                stack.save()
                             }
+                            .disabled(!validEnjoyer)
                         }
                     }
             }
         }
         .onAppear(perform: keepInitial)
+        .id(theId)
     }
     func keepInitial() {
-
-        expenseBeforeName = expense.wName
-        expenseBeforeAmount = expense.amount
-        for payer in expense.payersArray {
-            let a = PayerEnjoyer(bandera: payer.bandera, amount: payer.amount, toParticipant: payer.toParticipant!)
-            expenseBeforePayers.append(a)
-        }
-        for enjoyer in expense.enjoyersArray {
-            let a = PayerEnjoyer(bandera: enjoyer.bandera, amount: enjoyer.amount, toParticipant: enjoyer.toParticipant!)
-            expenseBeforeEnjoyers.append(a)
+        if firstCallExpense {
+            expenseBeforeName = expense.wName
+            expenseBeforeAmount = expense.amount
+            for payer in expense.payersArray {
+                let a = PayerEnjoyer(bandera: payer.bandera, amount: payer.amount, toParticipant: payer.toParticipant!)
+                expenseBeforePayers.append(a)
+            }
+            for enjoyer in expense.enjoyersArray {
+                let a = PayerEnjoyer(bandera: enjoyer.bandera, amount: enjoyer.amount, toParticipant: enjoyer.toParticipant!)
+                expenseBeforeEnjoyers.append(a)
+            }
+            firstCallExpense = false
         }
     }
     func createHistory() {
