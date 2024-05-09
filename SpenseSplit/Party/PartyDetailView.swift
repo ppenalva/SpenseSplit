@@ -54,7 +54,7 @@ struct PartyDetailView: View {
     @State var theId = 0
     
     @State var validExpense = false
-    @State var validPayment = false
+    @State var validPayment = true
     
     @State var firstCallExpense = false
     @State var firstCallPayment = false
@@ -150,8 +150,8 @@ struct PartyDetailView: View {
                             work02s = []
                             var work03 = c * -1
                             for entry in work01s {
-                            if work03 > 0.0 {
-                            if (entry.amount > work03) {
+                            if work03 > 0.01 {
+                            if (entry.amount >= work03) {
                             work02s.append(work01(participant: entry.participant, amount: work03))
                                 break
                             } else {
@@ -200,6 +200,7 @@ struct PartyDetailView: View {
                                     newPaymentEnjoyers.append(enjoyer)
                                 }
                             }
+                            validPayment = true
                             isPresentingNewPaymentView = true
                         }
                     label: {

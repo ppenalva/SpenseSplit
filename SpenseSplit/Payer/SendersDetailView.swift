@@ -70,9 +70,9 @@ struct SendersDetailView: View {
             validPayer = false
         }
         if (validPayer && validEnjoyer) {
-            validExpense = true
+            validPayment = true
         } else {
-            validExpense = false
+            validPayment = false
         }
     }
 }
